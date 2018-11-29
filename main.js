@@ -43,7 +43,7 @@ class InLineErrors extends React.Component {
     render() {
     return (
      <div id="inLine">
-       <h3> In Line Errors</h3>
+       <h3 id = "smallerrors"> In Line Errors</h3>
         <p> {this.list()}</p>
      </div>
     );
@@ -61,7 +61,7 @@ class BroadLevelErrors extends React.Component {
   render() {
     return (
        <div id="broadlevel">
-        <h3> Broad Level Errors</h3>
+        <h3 id = "smallerrors"> Broad Level Errors</h3>
         <p> {this.list()}</p>
        </div>
     );
@@ -81,7 +81,7 @@ class Zero extends React.Component {
    render() {
       return (
          <div id="zeroes">
-          <h1>Zero Values</h1>
+          <h1 id="fields">Zero Values</h1>
            <ul>
            {this.list()}
            </ul>
@@ -128,7 +128,7 @@ class Positive extends React.Component {
 
       return (
          <div id="positives">
-          <h1>Positive Values</h1>
+          <h1 id="fields">Positive Values</h1>
             <div id="tooltip" style={tooltipStyle}>{this.state.tooltip}</div>
 
            <ul>
@@ -153,7 +153,7 @@ class Negative extends React.Component {
    render() {
       return (
          <div id="negatives">
-         <h1>Negative Values</h1>
+         <h1 id="fields">Negative Values</h1>
            <ul>
            {this.list()}
            </ul>
