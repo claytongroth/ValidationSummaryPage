@@ -164,4 +164,3 @@ class Negative extends React.Component {
 
 
 ReactDOM.render(<App/>,document.getElementById('root'));
-// CTRL + SHIFT + H launch
