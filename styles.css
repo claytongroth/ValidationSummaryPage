@@ -64,3 +64,6 @@ li:hover {
   color: #FFC90E;
   cursor: pointer;
 }
+#desc{
+  font-weight: bold;
+}
