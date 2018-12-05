@@ -30,7 +30,7 @@ const testValues = {
       "PSTLADRESS": "-22746",
       "IMPROVED": "-22984",
       "ESTFMKVALUE": "-22211",
-      "ASSDACRES": "-19357",
+      "ASSDACRES": "200",
       "FORESTVALUE": "0",
       "ADDNUMPREFIX": "-5870",
       "ADDNUMSUFFIX": "-509",

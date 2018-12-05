@@ -1,8 +1,70 @@
+body {
+    background: #A1B3C0;
+}
+p {
+    padding-left: 10px;
+}
 #fields {
-  color:maroon;
+  text-align: center;
 }
 #smallerrors {
-  color:blue;
+  text-align: center;
+}
+#summary {
+    margin: auto;
+    width:75%;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    padding: 10px;
+    text-align: center;
+}
+#inline, #broad  {
+    display: inline-table;
+    background-color: #f7f7f7;
+    margin: auto;
+    margin-top: 1%;
+    margin-left: 2%;
+    width: 45%;
+    border: 3px solid black;
+    border-radius: 10px;
+    padding: 5px;
+    line-height: normal;
+}
+#comparison h2 {
+    text-align: center;
+}
+#comparison {
+    margin: auto;
+    margin-top: 1%;
+    border: 3px solid black;
+    border-radius: 10px;
+    background-color: #f7f7f7;
+    padding: 10px;
+}
+.data {
+    list-style-type: none;
+    vertical-align: middle;
+}
+.values {
+    display: inline-table;
+    margin: auto;
+    margin-top: 1%;
+    margin-left: 1%;
+    width: 30%;
+    border: 4px solid;
+    border-radius: 10px;
+    padding: 3px;
+    background: white;
+}
+#zeroes {
+    border-color: grey;
+}
+#positives {
+    border-color: #189238;
+}
+#negatives {
+    border-color: #D34057;
 }
 body {
   background-color: #76daff;

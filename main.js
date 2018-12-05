@@ -16,6 +16,8 @@ class App extends React.Component {
   )
   }
    render() {
+     const mr = this.state.validation.Records_Missing
+     const tr = this.state.validation.Tax_Roll_Years_Pcnt
      const fd = this.state.validation.Fields_Diffs
      const inL = this.state.validation.inLineErrors
      const bLL = this.state.validation.broadLevelErrors
@@ -45,10 +47,19 @@ class App extends React.Component {
                </p>
             </Tooltip>
             <InLineErrors inline={inL}/>
-            <BroadLevelErrors broadLevel={bLL} />
-            <Positive positives={fd}/>
-            <Negative negatives={fd}/>
-            <Zero zeroes={fd}/>
+            <div id="broad">
+                <BroadLevelErrors broadLevel={bLL} />
+                <TaxRoll taxroll={tr} />
+                <MissingRecords missing={mr} />
+                <p>If any of the above values are greater than 0, please add missing values.</p>
+            </div>
+            <div id="comparison">
+                <h2>Submission Comparison</h2>
+                <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
+                <Positive positives={fd}/>
+                <Zero zeroes={fd}/>
+                <Negative negatives={fd}/>
+            </div>
          </div>
       );
    }
@@ -65,8 +76,9 @@ class InLineErrors extends React.Component {
     render() {
     return (
      <div id="inLine">
-       <h3 id = "smallerrors"> In Line Errors</h3>
-        <p> {this.list()}</p>
+       <h2 id = "smallerrors"> In Line Errors</h2>
+       <p>The following lines summarized the element-specific errors that were found while validating your parcel dataset.  The stats below are meant as a means of reviewing the output.  Please see the GeneralElementErrors, AddressElementErrors, TaxrollElementErrors, and GeometricElementErrors fields to address these errors individually.</p>
+        <ul className="data"> {this.list()}</ul>
      </div>
     );
     }
@@ -83,11 +95,49 @@ class BroadLevelErrors extends React.Component {
   render() {
     return (
        <div id="broadlevel">
-        <h3 id = "smallerrors"> Broad Level Errors</h3>
-        <p> {this.list()}</p>
+        <h2 id = "smallerrors"> Broad Level Errors</h2>
+        <p>The following lines explain any broad geometric errors that were found while validating your parcel dataset.</p>
+        <ul className="data"> {this.list()}</ul>
        </div>
     );
   }
+}
+class TaxRoll extends React.Component {
+    list(){
+      var p = this.props.taxroll
+      var listArray = []
+      for (var i in p){
+          listArray.push(<li id={i} key={i}><b>{i + ": "}</b> {+ p[i] + "%"}</li>);
+      }
+      return listArray
+    }
+    render() {
+      return (
+         <div id="broadlevel">
+          <h3 id = "smallerrors">Taxroll Percentages</h3>
+          <ul className="data"> {this.list()}</ul>
+         </div>
+      );
+    }
+}
+class MissingRecords extends React.Component {
+    list(){
+      var p = this.props.missing
+      var listArray = []
+      for (var i in p){
+          listArray.push(<li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>);
+      }
+      return listArray
+    }
+    render() {
+      return (
+         <div id="broadlevel">
+          <h3 id = "smallerrors">Missing Records</h3>
+          <p>Records missing CONAME, PARCELFIPS, or PARCELSOURCE</p>
+          <ul className="data"> {this.list()}</ul>
+         </div>
+      );
+    }
 }
 class Zero extends React.Component {
   list(){
@@ -102,9 +152,10 @@ class Zero extends React.Component {
   }
    render() {
       return (
-         <div id="zeroes">
-          <h1 id="fields">Zero Values</h1>
-           <ul>
+         <div id="zeroes" className="values">
+          <h2 id="fields">Zero Diference</h2>
+          <p>No change in value from the previous submission. Double check that this fits with current submission.</p>
+           <ul className="data">
            {this.list()}
            </ul>
          </div>
@@ -132,9 +183,10 @@ class Positive extends React.Component {
    render() {
 
       return (
-         <div id="positives">
-          <h1 id="fields">Positive Values</h1>
-           <ul>
+         <div id="positives" className="values">
+          <h2 id="fields">Positive Difference</h2>
+           <p>Error/Flag: Value is significant in the positive direction. This difference could be indicative of an improvement in data.</p>
+           <ul className="data">
            {this.list()}
            </ul>
          </div>
@@ -155,9 +207,10 @@ class Negative extends React.Component {
   }
    render() {
       return (
-         <div id="negatives">
-         <h1 id="fields">Negative Values</h1>
-           <ul>
+         <div id="negatives" className="values">
+         <h2 id="fields">Negative Difference</h2>
+          <p>Error/Flag: Value is significant in the negative direction. This difference could be indicative of a problem in data.</p>
+           <ul className="data">
            {this.list()}
            </ul>
          </div>
