@@ -69,7 +69,7 @@ class InLineErrors extends React.Component {
       var listArray = []
       for (var i in p){
           listArray.push(
-            <Tooltip
+            <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
@@ -111,7 +111,7 @@ class BroadLevelErrors extends React.Component {
     var listArray = []
     for (var i in p){
         listArray.push(
-          <Tooltip
+          <Tooltip key={i}
              // options
              html={(
               <div id="tooltip">
@@ -154,7 +154,7 @@ class TaxRoll extends React.Component {
       var listArray = []
       for (var i in p){
           listArray.push(
-            <Tooltip
+            <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
@@ -195,7 +195,7 @@ class MissingRecords extends React.Component {
       var listArray = []
       for (var i in p){
           listArray.push(
-            <Tooltip
+            <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
@@ -236,7 +236,7 @@ class Zero extends React.Component {
     for (var i in p){
       if (p[i] == 0){
         listArray.push(
-          <Tooltip
+          <Tooltip key={i}
              // options
              html={(
               <div id="tooltip">
@@ -282,7 +282,7 @@ class Positive extends React.Component {
       if (p[i] > 0){
 
         listArray.push(
-          <Tooltip
+          <Tooltip key={i}
              // options
              html={(
               <div id="tooltip">
@@ -329,7 +329,7 @@ class Negative extends React.Component {
     for (var i in p){
       if (p[i] < 0){
         listArray.push(
-          <Tooltip
+          <Tooltip key={i}
              // options
              html={(
               <div id="tooltip">
