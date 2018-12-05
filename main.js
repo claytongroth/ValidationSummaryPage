@@ -21,10 +21,10 @@ class App extends React.Component {
      const fd = this.state.validation.Fields_Diffs
      const inL = this.state.validation.inLineErrors
      const bLL = this.state.validation.broadLevelErrors
-
+     const coInfo = this.state.validation.County_Info
       return (
          <div>
-            <h1>Validation Summary:</h1>
+            <h1>{coInfo.CO_NAME} County Validation Summary:</h1>
             <Tooltip
                // options
                html={(
