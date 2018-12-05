@@ -58,3 +58,7 @@ p {
 #negatives {
     border-color: #D34057;
 }
+li:hover {
+  color: #FFC90E;
+  cursor: pointer;
+}
