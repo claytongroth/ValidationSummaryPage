@@ -29,27 +29,6 @@ class App extends React.Component {
              <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
 
-            <Tooltip
-               // options
-               html={(
-                <div>
-                  <strong>
-                    Hello
-                  </strong>
-                </div>
-              )}
-               position="top"
-               trigger="click"
-               animation = "fade"
-               touchHold = "true"
-               size = "big"
-               offset = "-300"
-               theme = "light"
-             >
-               <p>
-                 POPUP
-               </p>
-            </Tooltip>
 
             <div id="inline" className="bricks">
                 <InLineErrors inline={inL}/>
