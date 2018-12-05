@@ -72,11 +72,11 @@ class InLineErrors extends React.Component {
             <Tooltip
                // options
                html={(
-                <div>
+                <div id="tooltip">
                   <strong>
                     {i}
                   </strong>
-                  <p>{e[i]}</p>
+                  <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
                 </div>
               )}
                position="top"
@@ -114,11 +114,11 @@ class BroadLevelErrors extends React.Component {
           <Tooltip
              // options
              html={(
-              <div>
+              <div id="tooltip">
               <strong>
                 {i}
               </strong>
-              <p>{e[i]}</p>
+              <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
               </div>
             )}
              position="top"
@@ -157,11 +157,11 @@ class TaxRoll extends React.Component {
             <Tooltip
                // options
                html={(
-                <div>
+                <div id="tooltip">
                 <strong>
                   {i}
                 </strong>
-                <p>{e[i]}</p>
+                <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
                 </div>
               )}
                position="top"
@@ -198,11 +198,11 @@ class MissingRecords extends React.Component {
             <Tooltip
                // options
                html={(
-                <div>
+                <div id="tooltip">
                 <strong>
                   {i}
                 </strong>
-                <p>{e[i]}</p>
+                <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
                 </div>
               )}
                position="top"
@@ -239,11 +239,11 @@ class Zero extends React.Component {
           <Tooltip
              // options
              html={(
-              <div>
+              <div id="tooltip">
               <strong>
                 {i}
               </strong>
-              <p>{e[i]}</p>
+              <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
               </div>
             )}
              position="top"
@@ -285,11 +285,11 @@ class Positive extends React.Component {
           <Tooltip
              // options
              html={(
-              <div>
+              <div id="tooltip">
               <strong>
                 {i}
               </strong>
-              <p>{e[i]}</p>
+              <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
               </div>
             )}
              position="top"
@@ -332,11 +332,11 @@ class Negative extends React.Component {
           <Tooltip
              // options
              html={(
-              <div>
+              <div id="tooltip">
               <strong>
                 {i}
               </strong>
-              <p>{e[i]}</p>
+              <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
               </div>
             )}
              position="top"
