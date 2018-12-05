@@ -51,14 +51,17 @@ class App extends React.Component {
                </p>
             </Tooltip>
 
-            <InLineErrors inline={inL}/>
-            <div id="broad">
+            <div id="inline" className="bricks">
+                <InLineErrors inline={inL}/>
+            </div>
+
+            <div id="broad" className="bricks">
                 <BroadLevelErrors broadLevel={bLL} />
                 <TaxRoll taxroll={tr} />
                 <MissingRecords missing={mr} />
             </div>
 
-            <div id="comparison">
+            <div id="comparison" className="bricks">
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
                 <Positive positives={fd}/>
@@ -80,7 +83,7 @@ class InLineErrors extends React.Component {
     }
     render() {
     return (
-     <div id="inLine">
+     <div>
        <h2 id = "smallerrors"> In Line Errors</h2>
        <p>The following lines summarized the element-specific errors that were found while validating your parcel dataset.  The stats below are meant as a means of reviewing the output.  Please see the GeneralElementErrors, AddressElementErrors, TaxrollElementErrors, and GeometricElementErrors fields to address these errors individually.</p>
         <ul className="data"> {this.list()}</ul>
