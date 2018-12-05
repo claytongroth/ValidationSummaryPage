@@ -6,21 +6,33 @@ class App extends React.Component {
       error: null,
       isLoaded: false,
       items: [],
-      validation: []
+      validation: [],
+      explanations: [],
     };
   }
   componentWillMount(){
     this.setState({
-      validation: testValues
-    }, () => console.log("State: ", this.state.validation)
+      validation: testValues,
+      explanations: explain
+    }, () => console.log("State: ", this.state.validation, this.state.explanations)
   )
   }
    render() {
      const mr = this.state.validation.Records_Missing
+     const mrExplained = this.state.explanations.Records_Missing
+
      const tr = this.state.validation.Tax_Roll_Years_Pcnt
+     const trExplained = this.state.explanations.Tax_Roll_Years_Pcnt
+
      const fd = this.state.validation.Fields_Diffs
+     const fdExplained = this.state.explanations.Fields_Diffs
+
      const inL = this.state.validation.inLineErrors
+     const inLExplained = this.state.explanations.inLineErrors
+
      const bLL = this.state.validation.broadLevelErrors
+     const bLLExplained = this.state.explanations.broadLevelErrors
+
      const coInfo = this.state.validation.County_Info
       return (
          <div>
@@ -31,21 +43,21 @@ class App extends React.Component {
 
 
             <div id="inline" className="bricks">
-                <InLineErrors inline={inL}/>
+                <InLineErrors inline={inL} inlineexp ={inLExplained}/>
             </div>
 
             <div id="broad" className="bricks">
-                <BroadLevelErrors broadLevel={bLL} />
-                <TaxRoll taxroll={tr} />
-                <MissingRecords missing={mr} />
+                <BroadLevelErrors broadLevel={bLL} broadLevelexp={bLLExplained} />
+                <TaxRoll taxroll={tr} taxrollexp={trExplained} />
+                <MissingRecords missing={mr} missingexp={mrExplained} />
             </div>
 
             <div id="comparison" className="bricks">
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
-                <Positive positives={fd}/>
-                <Zero zeroes={fd}/>
-                <Negative negatives={fd}/>
+                <Positive positives={fd} fdexp={fdExplained}/>
+                <Zero zeroes={fd} fdexp={fdExplained}/>
+                <Negative negatives={fd} fdexp={fdExplained}/>
             </div>
          </div>
       );
@@ -54,6 +66,7 @@ class App extends React.Component {
 class InLineErrors extends React.Component {
     list(){
       var p = this.props.inline
+      var e = this.props.inlineexp
       var listArray = []
       for (var i in p){
           listArray.push(
@@ -64,7 +77,7 @@ class InLineErrors extends React.Component {
                   <strong>
                     {i}
                   </strong>
-                  <p>Explanation Explanation Explanation Explanation </p>
+                  <p>{e[i]}</p>
                 </div>
               )}
                position="top"
@@ -95,6 +108,7 @@ class InLineErrors extends React.Component {
 class BroadLevelErrors extends React.Component {
   list(){
     var p = this.props.broadLevel
+    var e = this.props.broadLevelexp
     var listArray = []
     for (var i in p){
         listArray.push(
@@ -105,7 +119,7 @@ class BroadLevelErrors extends React.Component {
               <strong>
                 {i}
               </strong>
-              <p>Explanation Explanation Explanation Explanation </p>
+              <p>{e[i]}</p>
               </div>
             )}
              position="top"
@@ -136,6 +150,7 @@ class BroadLevelErrors extends React.Component {
 class TaxRoll extends React.Component {
     list(){
       var p = this.props.taxroll
+      var e = this.props.taxrollexp
       var listArray = []
       for (var i in p){
           listArray.push(
@@ -146,7 +161,7 @@ class TaxRoll extends React.Component {
                 <strong>
                   {i}
                 </strong>
-                <p>Explanation Explanation Explanation Explanation </p>
+                <p>{e[i]}</p>
                 </div>
               )}
                position="top"
@@ -176,6 +191,7 @@ class TaxRoll extends React.Component {
 class MissingRecords extends React.Component {
     list(){
       var p = this.props.missing
+      var e = this.props.missingexp
       var listArray = []
       for (var i in p){
           listArray.push(
@@ -186,7 +202,7 @@ class MissingRecords extends React.Component {
                 <strong>
                   {i}
                 </strong>
-                <p>Explanation Explanation Explanation Explanation </p>
+                <p>{e[i]}</p>
                 </div>
               )}
                position="top"
@@ -217,6 +233,7 @@ class MissingRecords extends React.Component {
 class Zero extends React.Component {
   list(){
     var p = this.props.zeroes
+    var e = this.props.fdexp
     var listArray = []
     for (var i in p){
       if (p[i] == 0){
@@ -228,7 +245,7 @@ class Zero extends React.Component {
               <strong>
                 {i}
               </strong>
-              <p>Explanation Explanation Explanation Explanation </p>
+              <p>{e[i]}</p>
               </div>
             )}
              position="top"
@@ -259,15 +276,9 @@ class Zero extends React.Component {
    }
 }
 class Positive extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      hover: false,
-      tooltip: ""
-    }
-  }
   list(){
     var p = this.props.positives
+    var e = this.props.fdexp
     var listArray = []
     for (var i in p){
       if (p[i] > 0){
@@ -280,7 +291,7 @@ class Positive extends React.Component {
               <strong>
                 {i}
               </strong>
-              <p>Explanation Explanation Explanation Explanation </p>
+              <p>{e[i]}</p>
               </div>
             )}
              position="top"
@@ -315,6 +326,7 @@ class Positive extends React.Component {
 class Negative extends React.Component {
   list(){
     var p = this.props.negatives
+    var e = this.props.fdexp
     var listArray = []
     for (var i in p){
       if (p[i] < 0){
@@ -326,7 +338,7 @@ class Negative extends React.Component {
               <strong>
                 {i}
               </strong>
-              <p>Explanation Explanation Explanation Explanation </p>
+              <p>{e[i]}</p>
               </div>
             )}
              position="top"

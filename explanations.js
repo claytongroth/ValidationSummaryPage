@@ -1,8 +1,6 @@
-const explain =
-  {"County_Info": {
+const explain = {"County_Info": {
     "Total_Records": 153,
      "CO_NAME": "VERNON",
-
       "Legacy": {
         "SUFFIX": 46,
         "STREETTYPE": 8335,
@@ -55,10 +53,10 @@ const explain =
         "Geometric_Misplacement_Flag": ["None"]
       },
       "inLineErrors": {
-          "Tax_Errors": "2",
-          "Address_Errors": "6",
-          "General_Errors": "6",
-          "Geometric_Errors": "0"
+          "Tax_Errors": "A",
+          "Address_Errors": "B",
+          "General_Errors": "C",
+          "Geometric_Errors": "D"
          },
          "Records_Missing": {
            "Missing_CONAME": "0",
