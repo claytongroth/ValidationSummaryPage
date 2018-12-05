@@ -21,11 +21,11 @@ class App extends React.Component {
      const fd = this.state.validation.Fields_Diffs
      const inL = this.state.validation.inLineErrors
      const bLL = this.state.validation.broadLevelErrors
-
+     const coInfo = this.state.validation.County_Info
       return (
          <div>
              <div id="summary" className="bricks">
-             <h1>Parcel Validation Summary</h1>
+             <h1> {coInfo.CO_NAME} Parcel Validation Summary</h1>
              <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
 
