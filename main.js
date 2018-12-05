@@ -1,4 +1,4 @@
-
+const Tooltip = reactTippy.Tooltip;
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -19,9 +19,31 @@ class App extends React.Component {
      const fd = this.state.validation.Fields_Diffs
      const inL = this.state.validation.inLineErrors
      const bLL = this.state.validation.broadLevelErrors
+
       return (
          <div>
             <h1>Validation Summary:</h1>
+            <Tooltip
+               // options
+               html={(
+                <div>
+                  <strong>
+                    Hello
+                  </strong>
+                </div>
+              )}
+               position="top"
+               trigger="click"
+               animation = "fade"
+               touchHold = "true"
+               size = "big"
+               offset = "-300"
+               theme = "light"
+             >
+               <p>
+                 POPUP
+               </p>
+            </Tooltip>
             <InLineErrors inline={inL}/>
             <BroadLevelErrors broadLevel={bLL} />
             <Positive positives={fd}/>
@@ -97,40 +119,21 @@ class Positive extends React.Component {
       tooltip: ""
     }
   }
-  hoverHandler(e){
-    this.setState({
-      hover: true,
-      tooltip: e.target.id
-    })
-    console.log(e.target, "hovering")
-  }
-  leaveHandler(e){
-    this.setState({
-      hover: false,
-      tooltip: ""
-    })
-    console.log(e.target, "leaving")
-  }
   list(){
     var p = this.props.positives
     var listArray = []
     for (var i in p){
       if (p[i] > 0){
-        listArray.push(<li key={i}><a id={i} value={p[i]} onMouseEnter={this.hoverHandler.bind(this)} onMouseLeave={this.leaveHandler.bind(this)} id="desc">{i + ": "}</a> {+ p[i]}</li>);
+        listArray.push(<li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>);
       }
     }
     return listArray.sort(function(a, b){return a.props.value - b.props.value});
   }
    render() {
-     const tooltipStyle = {
-        display: this.state.hover ? 'block' : 'none'
-      }
 
       return (
          <div id="positives">
           <h1 id="fields">Positive Values</h1>
-            <div id="tooltip" style={tooltipStyle}>{this.state.tooltip}</div>
-
            <ul>
            {this.list()}
            </ul>
