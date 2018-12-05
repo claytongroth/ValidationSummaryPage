@@ -15,7 +15,7 @@ p {
     text-align: center;
     margin: auto;
 }
-.broadLevel {
+#broadLevel {
     display: inline-table
 }
 .bricks {
@@ -30,6 +30,7 @@ p {
 #inline, #broad  {
     display: inline-table;
     width: 45%;
+    height: 300px;
 }
 #comparison h2 {
     text-align: center;

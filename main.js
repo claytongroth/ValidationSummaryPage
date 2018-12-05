@@ -29,7 +29,6 @@ class App extends React.Component {
              <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
 
-
             <div id="inline" className="bricks">
                 <InLineErrors inline={inL}/>
             </div>
@@ -125,9 +124,10 @@ class BroadLevelErrors extends React.Component {
   }
   render() {
     return (
-       <div id="broadlevel">
+       <div>
         <h2 id = "smallerrors"> Broad Level Errors</h2>
-        <p>The following lines explain any broad geometric errors that were found while validating your parcel dataset.</p>
+        <p>The following lines explain any broad geometric errors that were found while validating your parcel dataset.
+        If any of the "Missing Records" values are greater than 0, please add missing values.</p>
         <ul className="data"> {this.list()}</ul>
        </div>
     );
@@ -207,9 +207,7 @@ class MissingRecords extends React.Component {
       return (
          <div id="broadlevel">
           <h3 id = "smallerrors">Missing Records</h3>
-          <p>Records missing CONAME, PARCELFIPS, or PARCELSOURCE</p>
           <ul className="data"> {this.list()}</ul>
-          <p>If any of the above values are greater than 0, please add missing values.</p>
          </div>
       );
     }
