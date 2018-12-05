@@ -29,28 +29,6 @@ class App extends React.Component {
              <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
 
-            <Tooltip
-               // options
-               html={(
-                <div>
-                  <strong>
-                    Hello
-                  </strong>
-                </div>
-              )}
-               position="top"
-               trigger="click"
-               animation = "fade"
-               touchHold = "true"
-               size = "big"
-               offset = "-300"
-               theme = "light"
-             >
-               <p>
-                 POPUP
-               </p>
-            </Tooltip>
-
             <InLineErrors inline={inL}/>
             <div id="broad">
                 <BroadLevelErrors broadLevel={bLL} />
@@ -74,7 +52,29 @@ class InLineErrors extends React.Component {
       var p = this.props.inline
       var listArray = []
       for (var i in p){
-          listArray.push(<li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>);
+          listArray.push(
+            <Tooltip
+               // options
+               html={(
+                <div>
+                  <strong>
+                    {i}
+                  </strong>
+                  <p>Explanation Explanation Explanation Explanation </p>
+                </div>
+              )}
+               position="top"
+               trigger="click"
+               animation = "fade"
+               touchHold = "true"
+               size = "big"
+               offset = "-300"
+               theme = "light"
+             >
+               <li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+            </Tooltip>
+
+          );
       }
       return listArray
     }
@@ -93,7 +93,29 @@ class BroadLevelErrors extends React.Component {
     var p = this.props.broadLevel
     var listArray = []
     for (var i in p){
-        listArray.push(<li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>);
+        listArray.push(
+          <Tooltip
+             // options
+             html={(
+              <div>
+              <strong>
+                {i}
+              </strong>
+              <p>Explanation Explanation Explanation Explanation </p>
+              </div>
+            )}
+             position="top"
+             trigger="click"
+             animation = "fade"
+             touchHold = "true"
+             size = "big"
+             offset = "-300"
+             theme = "light"
+           >
+             <li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+          </Tooltip>
+
+        );
     }
     return listArray
   }
@@ -112,7 +134,29 @@ class TaxRoll extends React.Component {
       var p = this.props.taxroll
       var listArray = []
       for (var i in p){
-          listArray.push(<li id={i} key={i}><b>{i + ": "}</b> {+ p[i] + "%"}</li>);
+          listArray.push(
+            <Tooltip
+               // options
+               html={(
+                <div>
+                <strong>
+                  {i}
+                </strong>
+                <p>Explanation Explanation Explanation Explanation </p>
+                </div>
+              )}
+               position="top"
+               trigger="click"
+               animation = "fade"
+               touchHold = "true"
+               size = "big"
+               offset = "-300"
+               theme = "light"
+             >
+               <li id={i} key={i}><b>{i + ": "}</b> {+ p[i] + "%"}</li>
+            </Tooltip>
+
+          );
       }
       return listArray
     }
@@ -130,7 +174,28 @@ class MissingRecords extends React.Component {
       var p = this.props.missing
       var listArray = []
       for (var i in p){
-          listArray.push(<li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>);
+          listArray.push(
+            <Tooltip
+               // options
+               html={(
+                <div>
+                <strong>
+                  {i}
+                </strong>
+                <p>Explanation Explanation Explanation Explanation </p>
+                </div>
+              )}
+               position="top"
+               trigger="click"
+               animation = "fade"
+               touchHold = "true"
+               size = "big"
+               offset = "-300"
+               theme = "light"
+             >
+               <li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+            </Tooltip>
+          );
       }
       return listArray
     }
@@ -151,7 +216,28 @@ class Zero extends React.Component {
     var listArray = []
     for (var i in p){
       if (p[i] == 0){
-        listArray.push(<li id={i} key={i}><a id="desc">{i + ": "}</a> {+ p[i]}</li>);
+        listArray.push(
+          <Tooltip
+             // options
+             html={(
+              <div>
+              <strong>
+                {i}
+              </strong>
+              <p>Explanation Explanation Explanation Explanation </p>
+              </div>
+            )}
+             position="top"
+             trigger="click"
+             animation = "fade"
+             touchHold = "true"
+             size = "big"
+             offset = "-300"
+             theme = "light"
+           >
+             <li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
+          </Tooltip>
+        );
       }
     }
     return listArray
@@ -181,7 +267,30 @@ class Positive extends React.Component {
     var listArray = []
     for (var i in p){
       if (p[i] > 0){
-        listArray.push(<li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>);
+
+        listArray.push(
+          <Tooltip
+             // options
+             html={(
+              <div>
+              <strong>
+                {i}
+              </strong>
+              <p>Explanation Explanation Explanation Explanation </p>
+              </div>
+            )}
+             position="top"
+             trigger="click"
+             animation = "fade"
+             touchHold = "true"
+             size = "big"
+             offset = "-300"
+             theme = "light"
+           >
+             <li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
+          </Tooltip>
+
+        );
       }
     }
     return listArray.sort(function(a, b){return a.props.value - b.props.value});
@@ -205,7 +314,28 @@ class Negative extends React.Component {
     var listArray = []
     for (var i in p){
       if (p[i] < 0){
-        listArray.push(<li id={i} key={i} value={p[i]}><a id="desc">{i + ": "}</a> {+ p[i]}</li>);
+        listArray.push(
+          <Tooltip
+             // options
+             html={(
+              <div>
+              <strong>
+                {i}
+              </strong>
+              <p>Explanation Explanation Explanation Explanation </p>
+              </div>
+            )}
+             position="top"
+             trigger="click"
+             animation = "fade"
+             touchHold = "true"
+             size = "big"
+             offset = "-300"
+             theme = "light"
+           >
+             <li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
+          </Tooltip>
+        );
       }
     }
     console.log(listArray[0].props.value)
