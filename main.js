@@ -24,7 +24,11 @@ class App extends React.Component {
 
       return (
          <div>
-            <h1>Validation Summary:</h1>
+             <div id="summary" className="bricks">
+             <h1>Parcel Validation Summary</h1>
+             <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
+             </div>
+
             <Tooltip
                // options
                html={(
@@ -46,13 +50,14 @@ class App extends React.Component {
                  POPUP
                </p>
             </Tooltip>
+
             <InLineErrors inline={inL}/>
             <div id="broad">
                 <BroadLevelErrors broadLevel={bLL} />
                 <TaxRoll taxroll={tr} />
                 <MissingRecords missing={mr} />
-                <p>If any of the above values are greater than 0, please add missing values.</p>
             </div>
+
             <div id="comparison">
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
@@ -135,6 +140,7 @@ class MissingRecords extends React.Component {
           <h3 id = "smallerrors">Missing Records</h3>
           <p>Records missing CONAME, PARCELFIPS, or PARCELSOURCE</p>
           <ul className="data"> {this.list()}</ul>
+          <p>If any of the above values are greater than 0, please add missing values.</p>
          </div>
       );
     }
