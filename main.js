@@ -1,4 +1,5 @@
 const Tooltip = reactTippy.Tooltip;
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -37,26 +38,31 @@ class App extends React.Component {
       return (
          <div>
              <div id="summary" className="bricks">
-             <h1> {coInfo.CO_NAME} Parcel Validation Summary</h1>
+             <h1> {coInfo.CO_NAME} Parcel Validation Summary <img class="img-responsive" src="withumb.png" alt="" height="30" width="30"/></h1><hr/>
              <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
+             <div id="row">
+                <div id="inline" className="bricks">
+                    <InLineErrors inline={inL} inlineexp ={inLExplained}/>
+                </div>
 
-            <div id="inline" className="bricks">
-                <InLineErrors inline={inL} inlineexp ={inLExplained}/>
-            </div>
-
-            <div id="broad" className="bricks">
-                <BroadLevelErrors broadLevel={bLL} broadLevelexp={bLLExplained} />
-                <TaxRoll taxroll={tr} taxrollexp={trExplained} />
-                <MissingRecords missing={mr} missingexp={mrExplained} />
-            </div>
-
+                <div id="broad" className="bricks">
+                    <BroadLevelErrors broadLevel={bLL} broadLevelexp={bLLExplained} />
+                    <TaxRoll taxroll={tr} taxrollexp={trExplained} />
+                    <MissingRecords missing={mr} missingexp={mrExplained} />
+                </div>
+              </div>
             <div id="comparison" className="bricks">
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
-                <Positive positives={fd} fdexp={fdExplained}/>
-                <Zero zeroes={fd} fdexp={fdExplained}/>
-                <Negative negatives={fd} fdexp={fdExplained}/>
+
+                <p>***********GRAPH GOES HERE****************</p>
+
+                  <Expand>
+                      <Positive positives={fd} fdexp={fdExplained}/>
+                      <Zero zeroes={fd} fdexp={fdExplained}/>
+                      <Negative negatives={fd} fdexp={fdExplained}/>
+                  </Expand>
             </div>
          </div>
       );
@@ -264,12 +270,15 @@ class Zero extends React.Component {
    render() {
       return (
          <div id="zeroes" className="values">
-          <h2 id="fields">Zero Diference</h2>
-          <p>No change in value from the previous submission. Double check that this fits with current submission.</p>
-           <ul className="data">
-           {this.list()}
-           </ul>
+
+            <h2 id="fields">Zero Diference</h2>
+            <p>No change in value from the previous submission. Double check that this fits with current submission.</p>
+             <ul className="Pdata">
+             {this.list()}
+             </ul>
+
          </div>
+
       );
    }
 }
@@ -311,13 +320,15 @@ class Positive extends React.Component {
    render() {
 
       return (
+
          <div id="positives" className="values">
           <h2 id="fields">Positive Difference</h2>
            <p>Error/Flag: Value is significant in the positive direction. This difference could be indicative of an improvement in data.</p>
-           <ul className="data">
+           <ul className="Pdata">
            {this.list()}
            </ul>
          </div>
+
       );
    }
 }
@@ -357,15 +368,59 @@ class Negative extends React.Component {
   }
    render() {
       return (
-         <div id="negatives" className="values">
-         <h2 id="fields">Negative Difference</h2>
-          <p>Error/Flag: Value is significant in the negative direction. This difference could be indicative of a problem in data.</p>
-           <ul className="data">
-           {this.list()}
-           </ul>
+         <div id="negatives" className="values" >
+            <h2 id="fields">Negative Difference</h2>
+            <p>Error/Flag: Value is significant in the negative direction. This difference could be indicative of a problem in data.</p>
+             <ul className="Pdata" >
+             {this.list()}
+             </ul>
          </div>
+
       );
    }
+}
+
+class Expand extends React.Component {
+
+   constructor(){
+     super();
+     this.state = {
+        height:'.5em'
+     };
+   }
+
+  countLines =() => {
+    let height = this.testComp.offsetHeight;
+    if ( (height - 2 ) / 16 > 3.3 ) {
+       this.setState({showButton:true});
+    }
+  }
+
+  showHidePara =() => {
+     if (this.state.height == 'auto') {
+        this.setState({height:'.5em'});
+     } else {
+        this.setState({height:'auto'});
+     }
+  }
+
+  componentDidMount() {
+      this.countLines();
+  }
+
+  render() {
+    return (
+    < div>
+        { this.state.showButton ? <button id="subbutton"onClick={this.showHidePara}> + </button>: null}
+        <div id ="parent" style={{height:this.state.height}}>
+
+          <div id = "content" ref={(c) => this.testComp = c } style={{height:'auto'}}>
+         {this.props.children}
+         </div>
+      </div>
+    </div>
+    );
+  }
 }
 
 

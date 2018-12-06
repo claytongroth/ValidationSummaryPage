@@ -1,8 +1,12 @@
 body {
     background: #003366;
+    margin: 0;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 p {
     padding-left: 10px;
+    padding-right: 10px;
+    color: #4C4C4C;
 }
 #fields {
   text-align: center;
@@ -11,62 +15,124 @@ p {
   text-align: center;
 }
 #summary {
-    width:75%;
+    width:92.5%;
     text-align: center;
-    margin: auto;
 }
 #broadLevel {
-    display: inline-table
+    display: inline-table;
+    *display: inline;
+    width: 50%;
+}
+#row{
+  height: auto;
+  -ms-text-justify: distribute-all-lines;
+  text-justify: distribute-all-lines;
+
 }
 .bricks {
-    border: 1px solid #337ab7;
-    border-radius: 4px;
-    padding: 5px;
+    border: 2px solid #818181; /*#337ab7;*/
+    border-radius: 2px;
+    padding: 1px;
     background-color: #ECECEC;
     margin: auto;
     margin-top: 1%;
     margin-left: 2%;
 }
 #inline, #broad  {
-    display: inline-table;
+    display: inline-block;
+    vertical-align: top;
     width: 45%;
-    height: 300px;
+    height: auto;
+    min-height: 325px;
+    min-width: 400px;
+}
+#comparison{
+  width: auto;
+  margin-right: 5%;
 }
 #comparison h2 {
     text-align: center;
 }
-.data {
-    list-style-type: none;
+.Pdata {
+    list-style-type: circle;
     vertical-align: middle;
+    overflow-y: scroll;
+    height:150;
+    border-color: #003366;
+    margin-right: 1%;
 }
+
 .values {
-    display: inline-table;
     margin: auto;
     margin-top: 1%;
     margin-left: 1%;
     width: 30%;
-    height: 200px;
     border: 1px solid;
     border-radius: 4px;
     padding: 3px;
     background: white;
 }
+
 #zeroes {
-    border-color: grey;
+      border: 2px solid  grey;
+    height: 300px;
+    margin-bottom: 1%;
 }
 #positives {
-    border-color: #189238;
+      border: 2px solid  #189238;
+    height: 300px;
+    margin-bottom: 1%;
 }
-#negatives {
-    border-color: #D34057;
+#negatives  {
+    border: 2px solid #D34057;
+    height: 300px;
+    margin-bottom: 1%;
+
 }
+
+
 li:hover {
   color: #FFC90E;
   cursor: pointer;
 }
+
+li {
+  padding: 1px;
+}
+
 #desc{
   font-weight: bold;
 }
 #tooltip{
   color:	#404040;
 }
+
+#subbutton{
+  color:#e5eaef;
+  background-color: #003366;
+  border: 2px solid #4CAF50;
+  border-radius: 20%;
+}
+#subbutton:hover {
+  color:#e5eaef;
+  cursor: pointer;
+  background-color: #7f99b2;
+  border: 2px solid #003366;
+  border-radius: 20%;
+}
+
+
+
+#content {
+    line-height: 1.1em;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+
+#parent {
+     border : 1px solid #003366;
+     overflow : hidden;
+     background: #99adc1;
+ }
