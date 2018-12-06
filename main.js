@@ -48,6 +48,7 @@ class App extends React.Component {
 
                 <div id="broad" className="bricks">
                     <BroadLevelErrors broadLevel={bLL} broadLevelexp={bLLExplained} />
+                    <hr/>
                     <TaxRoll taxroll={tr} taxrollexp={trExplained} />
                     <MissingRecords missing={mr} missingexp={mrExplained} />
                 </div>

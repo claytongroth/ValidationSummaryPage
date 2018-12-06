@@ -3,31 +3,35 @@ body {
     margin: 0;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 p {
     padding-left: 10px;
     padding-right: 10px;
     color: #4C4C4C;
 }
+
 #fields {
   text-align: center;
 }
+
 #smallerrors {
   text-align: center;
 }
+
 #summary {
     width:92.5%;
     text-align: center;
 }
+
 #broadLevel {
     display: inline-table;
     *display: inline;
-    width: 50%;
 }
+
 #row{
   height: auto;
   -ms-text-justify: distribute-all-lines;
   text-justify: distribute-all-lines;
-
 }
 .bricks {
     border: 2px solid #818181; /*#337ab7;*/
@@ -42,14 +46,18 @@ p {
     display: inline-block;
     vertical-align: top;
     width: 45%;
-    height: auto;
+    height:350px;
+    overflow: auto;
+    /*height: auto;
     min-height: 325px;
-    min-width: 400px;
+    min-width: 400px;*/
 }
+
 #comparison{
   width: auto;
   margin-right: 5%;
 }
+
 #comparison h2 {
     text-align: center;
 }
@@ -78,11 +86,13 @@ p {
     height: 300px;
     margin-bottom: 1%;
 }
+
 #positives {
       border: 2px solid  #189238;
     height: 300px;
     margin-bottom: 1%;
 }
+
 #negatives  {
     border: 2px solid #D34057;
     height: 300px;
