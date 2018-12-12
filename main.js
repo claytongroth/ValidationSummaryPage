@@ -1,4 +1,70 @@
 const Tooltip = reactTippy.Tooltip;
+console.log(window.Recharts)
+const {BarChart, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Legend, Cell} = window.Recharts;
+const TooltipChart = window.Recharts.Tooltip;
+
+
+function getPcnt(oldNumber, newNumber){
+   var decreaseValue = Math.abs(oldNumber - newNumber);
+   if (newNumber < oldNumber) {
+      return parseInt(((decreaseValue / oldNumber) * 100)*-1);
+   }
+   else {
+     return parseInt((decreaseValue / oldNumber) * 100);
+   }
+};
+
+const setA = ["SUFFIX",
+              "STREETTYPE",
+              "PARCELID",
+              "LANDMARKNAME",
+              "SCHOOLDIST",
+              "IMPROVED",
+              "FORESTVALUE",
+              "CNTASSDVALUE",
+              "PARCELFIPS",
+              "UNITTYPE",
+              "ZIP4",
+              "GISACRES",
+              "SITEADRESS",
+              "ESTFMKVALUE"]
+const setB = [
+          "LONGITUDE",
+          "LOADDATE",
+          "STATE",
+          "CONAME",
+          "PARCELSRC",
+          "DEEDACRES",
+          "TAXROLLYEAR",
+          "PSTLADRESS",
+          "ADDNUMPREFIX",
+          "ADDNUM",
+          "PROPCLASS"
+        ]
+const setC =[
+        "STREETNAME",
+        "PLACENAME",
+        "TAXPARCELID",
+        "ZIPCODE",
+        "PREFIX",
+        "NETPRPTA",
+        "SCHOOLDISTNO",
+        "LNDVALUE",
+        "OWNERNME2"
+      ]
+const setD = [
+        "AUXCLASS",
+        "OWNERNME1",
+        "GRSPRPTA",
+        "IMPVALUE",
+        "UNITID",
+        "STATEID",
+        "ASSDACRES",
+        "ADDNUMSUFFIX",
+        "LATITUDE",
+        "PARCELDATE"
+      ]
+
 
 class App extends React.Component {
   constructor(props) {
@@ -18,27 +84,40 @@ class App extends React.Component {
     }, () => console.log("State: ", this.state.validation, this.state.explanations)
   )
   }
+  data(){
+    var data=[]
+   for (let i in testValues.County_Info.Legacy){
+     if (testValues.County_Info.Legacy[i] && testValues.Fields_Diffs[i]){
+     //console.log(i, testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i])
+     data.push({name: i, 'Percentage of Last Years Value': getPcnt(testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i]), amt: 2290},)
+     }
+    }
+   console.log(data)
+   return data
+  }
+
    render() {
-     const mr = this.state.validation.Records_Missing
-     const mrExplained = this.state.explanations.Records_Missing
+     const mr = this.state.validation.Records_Missing;
+     const mrExplained = this.state.explanations.Records_Missing;
 
-     const tr = this.state.validation.Tax_Roll_Years_Pcnt
-     const trExplained = this.state.explanations.Tax_Roll_Years_Pcnt
+     const tr = this.state.validation.Tax_Roll_Years_Pcnt;
+     const trExplained = this.state.explanations.Tax_Roll_Years_Pcnt;
 
-     const fd = this.state.validation.Fields_Diffs
-     const fdExplained = this.state.explanations.Fields_Diffs
+     const fd = this.state.validation.Fields_Diffs;
+     const fdExplained = this.state.explanations.Fields_Diffs;
 
-     const inL = this.state.validation.inLineErrors
-     const inLExplained = this.state.explanations.inLineErrors
+     const inL = this.state.validation.inLineErrors;
+     const inLExplained = this.state.explanations.inLineErrors;
 
-     const bLL = this.state.validation.broadLevelErrors
-     const bLLExplained = this.state.explanations.broadLevelErrors
+     const bLL = this.state.validation.broadLevelErrors;
+     const bLLExplained = this.state.explanations.broadLevelErrors;
 
-     const coInfo = this.state.validation.County_Info
+     const coInfo = this.state.validation.County_Info;
+
       return (
          <div>
              <div id="summary" className="bricks">
-             <h1> {coInfo.CO_NAME} Parcel Validation Summary <img class="img-responsive" src="withumb.png" alt="" height="30" width="30"/></h1><hr/>
+             <h1> {coInfo.CO_NAME} Parcel Validation Summary <img className="img-responsive" src="withumb.png" alt="" height="30" width="30"/></h1><hr/>
              <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
              <div id="row">
@@ -56,8 +135,25 @@ class App extends React.Component {
             <div id="comparison" className="bricks">
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
+                <div id="chart">
+                <BarChart width={1200} height={600} data={this.data()}
+                      margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                 <CartesianGrid strokeDasharray="2 2"/>
+                 <XAxis dataKey="name"/>
+                 <YAxis/>
+                 <TooltipChart/>
+                 <Legend />
+                 <ReferenceLine y={0} stroke='#000'/>
+                 <Bar dataKey="Percentage of Last Years Value">
+                  {
+                    this.data().map((entry, index) => (
+                      <Cell  fill={setA.indexOf(entry.name) > -1 ? '#d01c8b' : setB.indexOf(entry.name) > -1 ? '#f1b6da' : setC.indexOf(entry.name) > -1 ? '#b8e186' : '#4dac26' }  />
+                    ))
+                  }
+                </Bar>
 
-                <p>***********GRAPH GOES HERE****************</p>
+                </BarChart>
+                </div>
 
                   <Expand>
                       <Positive positives={fd} fdexp={fdExplained}/>
