@@ -318,10 +318,10 @@ var App = (function(_React$Component) {
                         setA.indexOf(entry.name) > -1
                           ? "#003366"
                           : setB.indexOf(entry.name) > -1
-                            ? "#f1b6da"
+                            ? "#36648B"
                             : setC.indexOf(entry.name) > -1
-                              ? "#b8e186"
-                              : "#4dac26"
+                              ? "#003366"
+                              : "#36648B"
                     });
                   })
                 )
