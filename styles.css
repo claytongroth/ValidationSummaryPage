@@ -101,7 +101,7 @@ p {
 }
 
 
-li:hover {
+.lihover:hover {
   color: #FFC90E;
   cursor: pointer;
 }
@@ -146,3 +146,13 @@ li {
      overflow : hidden;
      background: #99adc1;
  }
+.data {
+    list-style-type: none;
+}
+#extra{
+    display: none;
+}
+#more {
+    background-color: #004282;
+    color: white;
+}
