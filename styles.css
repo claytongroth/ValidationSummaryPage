@@ -100,7 +100,8 @@ p {
 }
 
 #chart{
-  margin: 5px;
+  margin: 0;
+  overflow: hidden;
   text-align: -webkit-center;
 }
 #rechart-wrapper{
