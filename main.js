@@ -134,7 +134,7 @@ class App extends React.Component {
               </div>
             <div id="comparison" className="bricks">
                 <h2>Submission Comparison</h2>
-                <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.<ExtraInfo></ExtraInfo></p>
+                <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
                 <div id="chart">
                 <BarChart width={1200} height={600} data={this.data()}
                       margin={{top: 5, right: 30, left: 20, bottom: 5}}>
@@ -165,38 +165,13 @@ class App extends React.Component {
       );
    }
 }
-class ExtraInfo extends React.Component {
-    render() {
-        return (
-            <div>
-                <button id="more">More</button>
-                <ul id ="extra">
-                    <li className="noHover">
-                    It is expected that parcel submissions continue to grow in quality and attribute completeness, as well as natural increases in quantity of records. These subtle changes may be reflected in the chart and are not necessarily indicative of errors.
-                    </li>
-                    <li className="noHover">
-                    Significant differences, however, in the number of records populated from one submission to the next (e.g., from V4 to V5) are indications of possible error or possible improvement.
-                    </li>
-                    <li className="noHover">
-                    The chart below is created by comparing your current submission against what was established in the previous year’s parcel data (the final, standardized V4 statewide parcel layer).
-                    </li>
-                    <li className="noHover">
-                    Please take a moment to review this chart. When reviewing an exceptional field perhaps an explanation will be immediately apparent, if not, examine the attribute field for an explanation.  Explanations are uses by the parcel processing team and may be placed in the Explain-Certification.txt.
-                    </li>
-                    <li className="noHover">
-                    Note: An exceptional value does not necessarily mean your data is incorrect. This chart is intended to highlight large discrepancies that could indicate missing or incorrect data.
-                    </li>
-                </ul>
-            </div>
-        );
-    }
-}
 class InLineErrors extends React.Component {
     list(){
       var p = this.props.inline
       var e = this.props.inlineexp
       var listArray = []
       for (var i in p){
+          var x = i.split("_").join(" ")
           var l = i.split("_")[0]
           listArray.push(
             <Tooltip key={i}
@@ -204,9 +179,9 @@ class InLineErrors extends React.Component {
                html={(
                 <div id="tooltip">
                   <strong>
-                    {i}
+                    {x}
                   </strong>
-                  <div dangerouslySetInnerHTML={{ __html: "There were " + p[i] + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + i + " field, which was added to your output feature class while executing the tool."}}></div>
+                  <div dangerouslySetInnerHTML={{ __html: "There were " + p[i] + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
                 </div>
               )}
                position="top"
@@ -217,7 +192,7 @@ class InLineErrors extends React.Component {
                offset = "-300"
                theme = "light"
              >
-               <li className="lihover" id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+               <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {+ p[i]}</li>
             </Tooltip>
 
           );
@@ -240,15 +215,26 @@ class BroadLevelErrors extends React.Component {
     var e = this.props.broadLevelexp
     var listArray = []
     for (var i in p){
+        var x = i.split("_").join(" ")
+        if (e[i] == "None") {
+            var z = "No action required"
+            var t = "No broad-level geometric errors found!"
+            var y = ""
+        }
+        else if (e[i] != "None") {
+            var z = e[i]
+            var t = e[i]
+            var y = "Please review the directives in the documentation here: "
+        }
         listArray.push(
           <Tooltip key={i}
              // options
              html={(
               <div id="tooltip">
               <strong>
-                {i}
+                {z}
               </strong>
-              <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
+              <div dangerouslySetInnerHTML={{ __html: y}}></div>
               </div>
             )}
              position="top"
@@ -259,7 +245,7 @@ class BroadLevelErrors extends React.Component {
              offset = "-300"
              theme = "light"
            >
-             <li className="lihover" id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+             <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {+ t}</li>
           </Tooltip>
 
         );
@@ -283,13 +269,15 @@ class TaxRoll extends React.Component {
       var e = this.props.taxrollexp
       var listArray = []
       for (var i in p){
+          var x = i.split("_").join(" ")
+          var z = x.replace(/Taxroll/g, "Tax Roll")
           listArray.push(
             <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
                 <strong>
-                  {i}
+                  {z}
                 </strong>
                 <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
                 </div>
@@ -302,7 +290,7 @@ class TaxRoll extends React.Component {
                offset = "-300"
                theme = "light"
              >
-               <li className="lihover" id={i} key={i}><b>{i + ": "}</b> {+ p[i] + "%"}</li>
+               <li className="lihover" id={i} key={i}><b>{z + ": "}</b> {+ p[i] + "%"}</li>
             </Tooltip>
 
           );
@@ -312,7 +300,7 @@ class TaxRoll extends React.Component {
     render() {
       return (
          <div id="broadlevel">
-          <h3 id = "smallerrors">Taxroll Percentages</h3>
+          <h3 id = "smallerrors">Tax Roll Percentages</h3>
           <ul className="data"> {this.list()}</ul>
          </div>
       );
@@ -324,15 +312,32 @@ class MissingRecords extends React.Component {
       var e = this.props.missingexp
       var listArray = []
       for (var i in p){
+          var x = i.split("_").join(" ")
+          var y = x.split(" ")[1]
+          if (e[i] > 0) {
+              var innerText = "There are " + e[i] + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
+          }
+          else if (e[i] == 0) {
+              var innerText = "There are 0 missing values in this field, no action required."
+          }
+          if (y.charAt(y.length - 1) == "E") {
+              var t = " (County Name)"
+          }
+          else if (y.charAt(y.length - 1) == "C") {
+              var t = " (Parcel Source Name)"
+          }
+          else if (y.charAt(y.length - 1) == "S") {
+              var t = " (Parcel Source FIPS)"
+          }
           listArray.push(
             <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
                 <strong>
-                  {i}
+                  {y + t}
                 </strong>
-                <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
+                <div dangerouslySetInnerHTML={{ __html: innerText}}></div>
                 </div>
               )}
                position="top"
@@ -343,7 +348,7 @@ class MissingRecords extends React.Component {
                offset = "-300"
                theme = "light"
              >
-               <li className="lihover" id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+               <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {+ p[i]}</li>
             </Tooltip>
           );
       }
