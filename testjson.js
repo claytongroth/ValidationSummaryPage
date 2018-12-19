@@ -113,7 +113,7 @@ const testValues =
               },
               "Tax_Roll_Years_Pcnt": {
               "Previous_Taxroll_Year": "0.0",
-              "Expected_Taxroll_Year": "100.0",
+              "Expected_Taxroll_Year": "96.0",
               "Other_Taxroll_Years": "0.0",
               "Future_Taxroll_Years": "0.0"
               }
