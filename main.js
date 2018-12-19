@@ -1,6 +1,6 @@
 const Tooltip = reactTippy.Tooltip;
 console.log(window.Recharts)
-const {BarChart, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Legend, Cell} = window.Recharts;
+const {ResponsiveContainer, BarChart, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Legend, Cell} = window.Recharts;
 const TooltipChart = window.Recharts.Tooltip;
 
 
@@ -31,10 +31,7 @@ const address = ["SUFFIX",
               "PARCELID",
               "STATEID"]
 const spatial = [
-          "LONGITUDE",
-          "LOADDATE",
-          "GISACRES",
-          "LATITUDE"
+
         ]
 const general =[
         "LANDMARKNAME",
@@ -48,6 +45,10 @@ const general =[
         "SCHOOLDISTNO"
       ]
 const tax = [
+        "LONGITUDE",
+        "LOADDATE",
+        "GISACRES",
+        "LATITUDE",
         "AUXCLASS",
         "GRSPRPTA",
         "IMPVALUE",
@@ -89,9 +90,22 @@ class App extends React.Component {
    for (let i in testValues.County_Info.Legacy){
      if (testValues.County_Info.Legacy[i] && testValues.Fields_Diffs[i]){
      //console.log(i, testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i])
-     data.push({name: i, 'Percentage of Last Years Value': getPcnt(testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i]), amt: 2290},)
+     data.push({
+      name: i, 'Percentage of Last Years Value': getPcnt(testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i]),
+      amt: 2290,
+      cat: general.indexOf(i) > -1 ? "general" : spatial.indexOf(i) > -1 ? 'spatial' : tax.indexOf(i) > -1 ? 'tax' : 'address'  })
      }
     }
+    console.log(data)
+    data = data.sort(function(a,b){
+      var categoryA = a.cat.toLowerCase(), categoryB = b.cat.toLowerCase()
+      if (categoryA > categoryB){
+        return -1
+      }
+      if (categoryA < categoryB){
+        return 1
+      }
+    })
    console.log(data)
    return data
   }
@@ -136,7 +150,8 @@ class App extends React.Component {
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
                 <div id="chart">
-                <BarChart width={1200} height={600} data={this.data()}
+                <ResponsiveContainer width="90%" height={400}>
+                <BarChart  data={this.data()}
                       margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                  <CartesianGrid strokeDasharray="2 2"/>
                  <XAxis dataKey="name" hide="true"/>
@@ -147,12 +162,13 @@ class App extends React.Component {
                  <Bar dataKey="Percentage of Last Years Value">
                   {
                     this.data().map((entry, index) => (
-                      <Cell  fill={general.indexOf(entry.name) > -1 ? '#2D3047' : spatial.indexOf(entry.name) > -1 ? '#93B7BE' : tax.indexOf(entry.name) > -1 ? '#A799B7' : '#048A81' }  />
+                      <Cell  fill={entry.cat === "general" ? '#2D3047' : entry.cat === "spatial" ? '#93B7BE' : entry.cat === "tax" ? '#A799B7' : '#048A81' }  />
                     ))
                   }
                 </Bar>
 
                 </BarChart>
+                </ResponsiveContainer>
                 </div>
 
                   <Expand>
