@@ -14,55 +14,55 @@ function getPcnt(oldNumber, newNumber){
    }
 };
 
-const setA = ["SUFFIX",
+const address = ["SUFFIX",
               "STREETTYPE",
-              "PARCELID",
-              "LANDMARKNAME",
-              "SCHOOLDIST",
-              "IMPROVED",
-              "FORESTVALUE",
-              "CNTASSDVALUE",
-              "PARCELFIPS",
-              "UNITTYPE",
-              "ZIP4",
-              "GISACRES",
+              "STREETNAME",
+              "PREFIX",
+              "ADDNUMPREFIX",
+              "ADDNUM",
+              "ADDNUMSUFFIX",
               "SITEADRESS",
-              "ESTFMKVALUE"]
-const setB = [
+              "PSTLADRESS",
+              "OWNERNME1",
+              "OWNERNME2",
+              "TAXROLLYEAR",
+              "PARCELDATE",
+              "TAXPARCELID",
+              "PARCELID",
+              "STATEID"]
+const spatial = [
           "LONGITUDE",
           "LOADDATE",
-          "STATE",
-          "CONAME",
-          "PARCELSRC",
-          "DEEDACRES",
-          "TAXROLLYEAR",
-          "PSTLADRESS",
-          "ADDNUMPREFIX",
-          "ADDNUM",
-          "PROPCLASS"
+          "GISACRES",
+          "LATITUDE"
         ]
-const setC =[
-        "STREETNAME",
+const general =[
+        "LANDMARKNAME",
         "PLACENAME",
-        "TAXPARCELID",
+        "UNITTYPE",
+        "UNITID",
         "ZIPCODE",
-        "PREFIX",
-        "NETPRPTA",
-        "SCHOOLDISTNO",
-        "LNDVALUE",
-        "OWNERNME2"
+        "ZIP4",
+        "STATE",
+        "SCHOOLDIST",
+        "SCHOOLDISTNO"
       ]
-const setD = [
+const tax = [
         "AUXCLASS",
-        "OWNERNME1",
         "GRSPRPTA",
         "IMPVALUE",
-        "UNITID",
-        "STATEID",
         "ASSDACRES",
-        "ADDNUMSUFFIX",
-        "LATITUDE",
-        "PARCELDATE"
+        "LNDVALUE",
+        "NETPRPTA",
+        "CONAME",
+        "PARCELSRC",
+        "DEEDACRES",
+        "IMPROVED",
+        "FORESTVALUE",
+        "CNTASSDVALUE",
+        "PARCELFIPS",
+        "ESTFMKVALUE",
+        "PROPCLASS"
       ]
 
 
@@ -139,7 +139,7 @@ class App extends React.Component {
                 <BarChart width={1200} height={600} data={this.data()}
                       margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                  <CartesianGrid strokeDasharray="2 2"/>
-                 <XAxis dataKey="name"/>
+                 <XAxis dataKey="name" hide="true"/>
                  <YAxis/>
                  <TooltipChart/>
                  <Legend />
@@ -147,7 +147,7 @@ class App extends React.Component {
                  <Bar dataKey="Percentage of Last Years Value">
                   {
                     this.data().map((entry, index) => (
-                      <Cell  fill={setA.indexOf(entry.name) > -1 ? '#d01c8b' : setB.indexOf(entry.name) > -1 ? '#f1b6da' : setC.indexOf(entry.name) > -1 ? '#b8e186' : '#4dac26' }  />
+                      <Cell  fill={general.indexOf(entry.name) > -1 ? '#2D3047' : spatial.indexOf(entry.name) > -1 ? '#93B7BE' : tax.indexOf(entry.name) > -1 ? '#A799B7' : '#048A81' }  />
                     ))
                   }
                 </Bar>
