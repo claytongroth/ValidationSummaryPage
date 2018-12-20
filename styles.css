@@ -13,7 +13,9 @@ p {
 #fields {
   text-align: center;
 }
-
+.custom-tooltip{
+  background-color: white;
+}
 #smallerrors {
   text-align: center;
 }
@@ -98,13 +100,33 @@ p {
     height: 300px;
     margin-bottom: 1%;
 }
-
 #chart{
   margin: 0;
   overflow: hidden;
-  text-align: -webkit-center;
 }
-#rechart-wrapper{
+.chartpair{
+  text-align: center;
+  display: inline-block;
+}
+
+#chartbutton{
+  color:#e5eaef;
+  background-color: #003366;
+  border: 2px solid #FFC90E;
+  border-radius: 10%;
+}
+#chartbutton:hover {
+  color:#e5eaef;
+  cursor: pointer;
+  background-color: #7f99b2;
+  border: 2px solid #003366;
+  border-radius: 10%;
+}
+#infoPanel{
+  text-align: center;
+
+}
+.rechart-wrapper{
   margin: 5px;
   text-align: center;
 }

@@ -1,5 +1,4 @@
 const Tooltip = reactTippy.Tooltip;
-console.log(window.Recharts)
 const {ResponsiveContainer, BarChart, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Legend, Cell} = window.Recharts;
 const TooltipChart = window.Recharts.Tooltip;
 
@@ -13,7 +12,6 @@ function getPcnt(oldNumber, newNumber){
      return parseInt((decreaseValue / oldNumber) * 100);
    }
 };
-
 const address = ["SUFFIX",
               "STREETTYPE",
               "STREETNAME",
@@ -30,9 +28,6 @@ const address = ["SUFFIX",
               "TAXPARCELID",
               "PARCELID",
               "STATEID"]
-const spatial = [
-
-        ]
 const general =[
         "LANDMARKNAME",
         "PLACENAME",
@@ -65,12 +60,17 @@ const tax = [
         "ESTFMKVALUE",
         "PROPCLASS"
       ]
-
+const catColors = {
+  tax: "#53BDAE",
+  general:"#D3E5CF",
+  address:"#FE9C79"
+}
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedBar: {},
       error: null,
       isLoaded: false,
       items: [],
@@ -87,16 +87,27 @@ class App extends React.Component {
   }
   data(){
     var data=[]
-   for (let i in testValues.County_Info.Legacy){
-     if (testValues.County_Info.Legacy[i] && testValues.Fields_Diffs[i]){
-     //console.log(i, testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i])
-     data.push({
-      name: i, 'Percentage of Last Years Value': getPcnt(testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i]),
-      amt: 2290,
-      cat: general.indexOf(i) > -1 ? "general" : spatial.indexOf(i) > -1 ? 'spatial' : tax.indexOf(i) > -1 ? 'tax' : 'address'  })
-     }
+    for (let i in testValues.County_Info.Legacy){
+        // if change is zero don't display if old value is zero and new is X explain.
+        if ((testValues.County_Info.Legacy[i] === 0) && (!(testValues.Fields_Diffs[i] === "0")) ){
+          data.push({
+           name: i,
+           'Percentage of Last Years Value': 100,
+           cat: general.indexOf(i) > -1 ? "general" : tax.indexOf(i) > -1 ? 'tax' : 'address',
+           tell: ("There are: " + testValues.Fields_Diffs[i] + " new values since last submission.")
+           })
+        }
+         if ( (!(testValues.County_Info.Legacy[i] === null) && !(testValues.Fields_Diffs[i] === null)) ){
+           //console.log("Field: ", i, "LEGACY: ", testValues.County_Info.Legacy[i], "New Value: ", testValues.Fields_Diffs[i])
+           data.push({
+            name: i,
+            'Percentage of Last Years Value': getPcnt(testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i]),
+            cat: general.indexOf(i) > -1 ? "general" : tax.indexOf(i) > -1 ? 'tax' : 'address',
+            tell: ("Last submission: " + testValues.County_Info.Legacy[i] + " This submission: " + testValues.Fields_Diffs[i])
+          })
+           }
     }
-    console.log(data)
+    data = data.filter(x => (!isNaN(x['Percentage of Last Years Value']) && !(x['Percentage of Last Years Value'] === 0)) )
     data = data.sort(function(a,b){
       var categoryA = a.cat.toLowerCase(), categoryB = b.cat.toLowerCase()
       if (categoryA > categoryB){
@@ -106,9 +117,41 @@ class App extends React.Component {
         return 1
       }
     })
-   console.log(data)
+    //console.log(data)
    return data
   }
+  onBarClick(bar) {
+    this.setState({selectedBar: bar});
+  }
+  renderSelectedBar(bar) {
+   return (
+       <div className='infoPanel'>
+         <Tooltip
+             html={(
+              <div id="tooltip">
+                <strong>
+                  {bar.name}
+                </strong>
+                <div dangerouslySetInnerHTML={{ __html: this.state.explanations.Fields_Diffs[bar.name]}}></div>
+              </div>
+            )}
+           position="bottom"
+           trigger="click"
+           animation = "fade"
+           touchHold = "true"
+           size = "big"
+           offset = "-300"
+           theme = "light"
+         >
+             <button id="chartbutton">{bar.name ? bar.name : "Click a Value." }</button>
+        </Tooltip>
+        <hr></hr>
+        //ALIAS will go in the below
+        <div dangerouslySetInnerHTML={{ __html: this.state.explanations.Fields_Diffs[bar.name] + " Click for details."}}></div>
+       </div>
+
+   );
+}
 
    render() {
      const mr = this.state.validation.Records_Missing;
@@ -131,8 +174,8 @@ class App extends React.Component {
       return (
          <div>
              <div id="summary" className="bricks">
-             <h1> {coInfo.CO_NAME.charAt(0) + coInfo.CO_NAME.slice(1).toLowerCase()} Parcel Validation Summary <img className="img-responsive" src="withumb.png" alt="" height="30" width="30"/></h1><hr/>
-             <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
+               <h1> {coInfo.CO_NAME.charAt(0) + coInfo.CO_NAME.slice(1).toLowerCase()} Parcel Validation Summary <img className="img-responsive" src="withumb.png" alt="" height="30" width="30"/></h1><hr/>
+               <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
              <div id="row">
                 <div id="inline" className="bricks">
@@ -150,37 +193,61 @@ class App extends React.Component {
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
                 <div id="chart">
-                <ResponsiveContainer width="90%" height={400}>
-                <BarChart  data={this.data()}
-                      margin={{top: 5, right: 30, left: 20, bottom: 5}}>
-                 <CartesianGrid strokeDasharray="2 2"/>
-                 <XAxis dataKey="name" hide="true"/>
-                 <YAxis/>
-                 <TooltipChart/>
-                 <Legend />
-                 <ReferenceLine y={0} stroke='#000'/>
-                 <Bar dataKey="Percentage of Last Years Value">
-                  {
-                    this.data().map((entry, index) => (
-                      <Cell  fill={entry.cat === "general" ? '#2D3047' : entry.cat === "spatial" ? '#93B7BE' : entry.cat === "tax" ? '#A799B7' : '#048A81' }  />
-                    ))
-                  }
-                </Bar>
-
-                </BarChart>
-                </ResponsiveContainer>
+                  <ResponsiveContainer className="chartpair" width="90%" height={50} >
+                    { this.state.selectedBar ? this.renderSelectedBar(this.state.selectedBar) : undefined }
+                  </ResponsiveContainer>
+                  <ResponsiveContainer width="90%" height={400}>
+                    <BarChart  data={this.data()}
+                          margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+                       <CartesianGrid strokeDasharray="2 2"/>
+                       <XAxis dataKey="name" hide="true"/>
+                       <YAxis/>
+                       <TooltipChart content={<CustomTooltip/>}/>
+                       <Legend payload={
+                        [
+                          { id: 'General', value: 'General', type: 'rect', color: catColors.general},
+                          { id: 'Address', value: 'Address', type: 'rect', color: catColors.address},
+                          { id: 'Tax', value: 'Tax', type: 'rect', color: catColors.tax},
+                        ]
+                       }/>
+                       <ReferenceLine y={0} stroke='#000'/>
+                       <Bar onClick={this.onBarClick.bind(this)} dataKey="Percentage of Last Years Value">
+                        {
+                          this.data().map((entry, index) => (
+                            <Cell  stroke={entry.name === this.state.selectedBar.name ? '#FFC90E' : "none"} strokeWidth={3} fill={entry.cat === "general" ? catColors.general : entry.cat === "tax" ? catColors.tax : catColors.address }/>
+                          ))
+                        }
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
                 </div>
-
-                  <Expand>
-                      <Positive positives={fd} fdexp={fdExplained}/>
-                      <Zero zeroes={fd} fdexp={fdExplained}/>
-                      <Negative negatives={fd} fdexp={fdExplained}/>
-                  </Expand>
+                <Expand>
+                    <Positive positives={fd} fdexp={fdExplained}/>
+                    <Zero zeroes={fd} fdexp={fdExplained}/>
+                    <Negative negatives={fd} fdexp={fdExplained}/>
+                </Expand>
             </div>
          </div>
       );
    }
 }
+class CustomTooltip  extends React.Component{
+  render() {
+    const { active } = this.props;
+    if (active) {
+      const { payload, label } = this.props;
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`${label} : ${payload[0].value}`}%</p>
+          <p className="intro">{payload[0].payload.tell}</p>
+          <p className="desc">Click for field details.</p>
+        </div>
+      );
+    }
+    return null;
+  }
+};
+
 class InLineErrors extends React.Component {
     list(){
       var p = this.props.inline
@@ -192,10 +259,10 @@ class InLineErrors extends React.Component {
                // options
                html={(
                 <div id="tooltip">
-                  <strong>
-                    {i}
-                  </strong>
-                  <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
+                <strong>
+                  {i}
+                </strong>
+                <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
                 </div>
               )}
                position="top"
@@ -476,7 +543,7 @@ class Negative extends React.Component {
         );
       }
     }
-    console.log(listArray[0].props.value)
+
     return listArray.sort(function(a, b){return a.props.value - b.props.value});
   }
    render() {
