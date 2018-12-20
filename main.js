@@ -191,7 +191,7 @@ class App extends React.Component {
               </div>
             <div id="comparison" className="bricks">
                 <h2>Submission Comparison</h2>
-                <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.</p>
+                <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.<ExtraInfo></ExtraInfo></p>
                 <div id="chart">
                   <ResponsiveContainer className="chartpair" width="90%" height={50} >
                     { this.state.selectedBar ? this.renderSelectedBar(this.state.selectedBar) : undefined }
@@ -248,32 +248,79 @@ class CustomTooltip  extends React.Component{
   }
 };
 
+class ExtraInfo extends React.Component {
+    constructor(){
+      super();
+      this.state = {
+         display: 'none',
+         name: "More"
+      };
+    }
+
+    showHide =() => {
+        if (this.state.display == 'none') {
+            this.setState({display:'block'});
+            this.setState({name:"Less"})
+        } else {
+            this.setState({display:'none'});
+            this.setState({name:"More"})
+        }
+    }
+
+    render() {
+        return (
+        <div>
+            <button id="more" onClick={this.showHide}>{this.state.name}</button>
+            <ul id ="extra" style={{display:this.state.display}}>
+                <li className="noHover">
+                It is expected that parcel submissions continue to grow in quality and attribute completeness, as well as natural increases in quantity of records. These subtle changes may be reflected in the chart and are not necessarily indicative of errors.
+                </li>
+                <li className="noHover">
+                Significant differences, however, in the number of records populated from one submission to the next (e.g., from V4 to V5) are indications of possible error or possible improvement.
+                </li>
+                <li className="noHover">
+                The chart below is created by comparing your current submission against what was established in the previous year’s parcel data (the final, standardized V4 statewide parcel layer).
+                </li>
+                <li className="noHover">
+                Please take a moment to review this chart. When reviewing an exceptional field perhaps an explanation will be immediately apparent, if not, examine the attribute field for an explanation.  Explanations are uses by the parcel processing team and may be placed in the Explain-Certification.txt.
+                </li>
+                <li className="noHover">
+                Note: An exceptional value does not necessarily mean your data is incorrect. This chart is intended to highlight large discrepancies that could indicate missing or incorrect data.
+                </li>
+            </ul>
+        </div>
+    );
+    }
+}
+
 class InLineErrors extends React.Component {
     list(){
       var p = this.props.inline
       var e = this.props.inlineexp
       var listArray = []
       for (var i in p){
+          var x = i.split("_").join(" ")
+          var l = i.split("_")[0]
           listArray.push(
             <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
-                <strong>
-                  {i}
-                </strong>
-                <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
+                  <strong>
+                    {x}
+                  </strong>
+                  <div dangerouslySetInnerHTML={{ __html: "There were " + p[i] + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
                 </div>
               )}
                position="top"
                trigger="click"
                animation = "fade"
                touchHold = "true"
-               size = "big"
+               size = "large"
                offset = "-300"
                theme = "light"
              >
-               <li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+               <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {+ p[i]}</li>
             </Tooltip>
 
           );
@@ -284,7 +331,7 @@ class InLineErrors extends React.Component {
     return (
      <div>
        <h2 id = "smallerrors"> In Line Errors</h2>
-       <p>The following lines summarized the element-specific errors that were found while validating your parcel dataset.  The stats below are meant as a means of reviewing the output.  Please see the GeneralElementErrors, AddressElementErrors, TaxrollElementErrors, and GeometricElementErrors fields to address these errors individually.</p>
+       <p>The following lines summarize the element-specific errors that were found while validating your parcel dataset.  The stats below are meant as a means of reviewing the output.  Please see the GeneralElementErrors, AddressElementErrors, TaxrollElementErrors, and GeometricElementErrors fields within the output feature class to address these errors individually.</p>
         <ul className="data"> {this.list()}</ul>
      </div>
     );
@@ -296,26 +343,37 @@ class BroadLevelErrors extends React.Component {
     var e = this.props.broadLevelexp
     var listArray = []
     for (var i in p){
+        var x = i.split("_").join(" ")
+        if (p[i] == "None") {
+            var z = "No action required"
+            var t = "No broad-level geometric errors found!"
+            var y = ""
+        }
+        else if (p[i] != "None") {
+            var z = p[i]
+            var t = p[i]
+            var y = "Please review the directives in the documentation here: "
+        }
         listArray.push(
           <Tooltip key={i}
              // options
              html={(
               <div id="tooltip">
               <strong>
-                {i}
+                {z}
               </strong>
-              <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
+              <div dangerouslySetInnerHTML={{ __html: y}}></div>
               </div>
             )}
              position="top"
              trigger="click"
              animation = "fade"
              touchHold = "true"
-             size = "big"
+             size = "large"
              offset = "-300"
              theme = "light"
            >
-             <li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+             <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {t}</li>
           </Tooltip>
 
         );
@@ -339,26 +397,61 @@ class TaxRoll extends React.Component {
       var e = this.props.taxrollexp
       var listArray = []
       for (var i in p){
+          var x = i.split("_").join(" ")
+          var z = x.replace(/Taxroll/g, "Tax Roll")
+          var d = new Date()
+          var d = d.getFullYear()
+          var h = ""
+          var t = ""
+
+          if (i == "Previous_Taxroll_Year") {
+              var h = p[i] + "% of the TAXROLLYEAR field contains previous (" + d + ") tax roll year values.<br>"
+
+              if (p[i] > 0) {
+                  var t = "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
+              }
+          }
+          else if (i == "Expected_Taxroll_Year") {
+              var h = p[i] + "% of the TAXROLLYEAR field contains expected (" + d + ") tax roll year values.<br>"
+
+              if (p[i] <= 97) {
+                  var t = " Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and expected TAXROLLYEAR values should account for no less than 97% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt. <br> *Note that non-parcel features, such as ROW or Hydro, are excluded from this summary."
+              }
+          }
+          else if (i == "Other_Taxroll_Years") {
+                  var h = "0% of the TAXROLLYEAR field contains values other than the previous (" + (d - 1) + "), future (" + (d + 1) + "), or expected (" + d + ") tax roll year.<br>"
+
+                  if (p[i] > 0) {
+                      var t = "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
+              }
+          }
+          else if (i == "Future_Taxroll_Years") {
+              var h = p[i] + "% of the TAXROLLYEAR field contains future (" + d + ") tax roll year values.<br>"
+
+              if (p[i] >= 3) {
+                  var t = "Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and future TAXROLLYEAR values should account for no more than 3% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
+              }
+          }
           listArray.push(
             <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
                 <strong>
-                  {i}
+                  {z}
                 </strong>
-                <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
+                <div dangerouslySetInnerHTML={{ __html: h + t}}></div>
                 </div>
               )}
                position="top"
                trigger="click"
                animation = "fade"
                touchHold = "true"
-               size = "big"
+               size = "large"
                offset = "-300"
                theme = "light"
              >
-               <li id={i} key={i}><b>{i + ": "}</b> {+ p[i] + "%"}</li>
+               <li className="lihover" id={i} key={i}><b>{z + ": "}</b> {+ p[i] + "%"}</li>
             </Tooltip>
 
           );
@@ -368,7 +461,7 @@ class TaxRoll extends React.Component {
     render() {
       return (
          <div id="broadlevel">
-          <h3 id = "smallerrors">Taxroll Percentages</h3>
+          <h3 id = "smallerrors">Tax Roll Percentages</h3>
           <ul className="data"> {this.list()}</ul>
          </div>
       );
@@ -380,26 +473,43 @@ class MissingRecords extends React.Component {
       var e = this.props.missingexp
       var listArray = []
       for (var i in p){
+          var x = i.split("_").join(" ")
+          var y = x.split(" ")[1]
+          if (e[i] > 0) {
+              var innerText = "There are " + e[i] + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
+          }
+          else if (e[i] == 0) {
+              var innerText = "There are 0 missing values in this field, no action required."
+          }
+          if (y.charAt(y.length - 1) == "E") {
+              var t = " (County Name)"
+          }
+          else if (y.charAt(y.length - 1) == "C") {
+              var t = " (Parcel Source Name)"
+          }
+          else if (y.charAt(y.length - 1) == "S") {
+              var t = " (Parcel Source FIPS)"
+          }
           listArray.push(
             <Tooltip key={i}
                // options
                html={(
                 <div id="tooltip">
                 <strong>
-                  {i}
+                  {y + t}
                 </strong>
-                <div dangerouslySetInnerHTML={{ __html: e[i]}}></div>
+                <div dangerouslySetInnerHTML={{ __html: innerText}}></div>
                 </div>
               )}
                position="top"
                trigger="click"
                animation = "fade"
                touchHold = "true"
-               size = "big"
+               size = "large"
                offset = "-300"
                theme = "light"
              >
-               <li id={i} key={i}><b>{i + ": "}</b> {+ p[i]}</li>
+               <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {+ p[i]}</li>
             </Tooltip>
           );
       }
@@ -436,7 +546,7 @@ class Zero extends React.Component {
              trigger="click"
              animation = "fade"
              touchHold = "true"
-             size = "big"
+             size = "large"
              offset = "-300"
              theme = "light"
            >
@@ -485,7 +595,7 @@ class Positive extends React.Component {
              trigger="click"
              animation = "fade"
              touchHold = "true"
-             size = "big"
+             size = "large"
              offset = "-300"
              theme = "light"
            >
@@ -534,7 +644,7 @@ class Negative extends React.Component {
              trigger="click"
              animation = "fade"
              touchHold = "true"
-             size = "big"
+             size = "large"
              offset = "-300"
              theme = "light"
            >

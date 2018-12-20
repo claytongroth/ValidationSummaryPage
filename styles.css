@@ -131,7 +131,7 @@ p {
   text-align: center;
 }
 
-li:hover {
+.lihover:hover {
   color: #FFC90E;
   cursor: pointer;
 }
@@ -145,6 +145,7 @@ li {
 }
 #tooltip{
   color:	#404040;
+  text-align: left;
 }
 
 #subbutton{
@@ -176,3 +177,13 @@ li {
      overflow : hidden;
      background: #99adc1;
  }
+.data {
+    list-style-type: none;
+}
+#extra{
+    display: none;
+}
+#more {
+    background-color: #004282;
+    color: white;
+}
