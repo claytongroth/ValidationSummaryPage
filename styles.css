@@ -183,7 +183,17 @@ li {
 #extra{
     display: none;
 }
-#more {
+#moreButton {
     background-color: #004282;
-    color: white;
+    color: white
+}
+footer {
+    text-align: right;
+    color: darkgrey;
+}
+#less {
+    color: orange;
+}
+#more {
+    color: #003366;
 }

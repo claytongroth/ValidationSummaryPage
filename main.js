@@ -62,7 +62,7 @@ const tax = [
       ]
 const catColors = {
   tax: "#53BDAE",
-  general:"#D3E5CF",
+  general:"#78a75c",
   address:"#FE9C79"
 }
 
@@ -124,7 +124,36 @@ class App extends React.Component {
     this.setState({selectedBar: bar});
   }
   renderSelectedBar(bar) {
+      var n = testValues.Fields_Diffs[bar.name]
+      var o = testValues.County_Info.Legacy[bar.name]
+      var t = testValues.County_Info.Total_Records
+      var pct = getPcnt(o, n)
+      var less = "<u><b id='less'>fewer</u></b>"
+      var more = "<u><b id='more'>more</b></u>"
+      var total = pct.toString().replace("-", "") + "%  of " + t + " records"
+
+          if (pct > 2.5) {
+              var sub = pct + "% " + more + " non-null values than V4 data.<br><br>"
+              var text = "There are " + pct + "% " + more + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field. This condition may also be the result of new parcels or new values added to the data (in which case they can be left as is.)"
+          }
+          else if (pct < -2.5) {
+              pct = pct.toString().replace("-", "")
+              var sub = pct + "% " + less + "  non-null values than V4 data.<br><br>"
+              var text = "There are " + pct + "% " + less + " "+ bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field."
+          }
+          else if (pct > -2.5 && pct < 2.5) {
+              if (pct < 2.5) {
+                  var sub = pct + "% " + more + " non-null values than V4 data.<br><br>"
+                  var text = "There are " + pct + "% " + more + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field. This condition may also be the result of new parcels or new values added to the data (in which case they can be left as is.)"
+              }
+              else if (pct > -2.5) {
+                  pct = pct.toString().replace("-", "")
+                  var sub = pct + "% " + less + " non-null values than V4 data.<br><br>"
+                  var text = "There are " + pct + "% " + less + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field."
+              }
+          }
    return (
+
        <div className='infoPanel'>
          <Tooltip
              html={(
@@ -132,14 +161,16 @@ class App extends React.Component {
                 <strong>
                   {bar.name}
                 </strong>
-                <div dangerouslySetInnerHTML={{ __html: this.state.explanations.Fields_Diffs[bar.name]}}></div>
+                <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div>
+                <div dangerouslySetInnerHTML={{ __html: text}}></div>
+                <footer dangerouslySetInnerHTML={{ __html: total}}></footer>
               </div>
             )}
            position="bottom"
            trigger="click"
            animation = "fade"
            touchHold = "true"
-           size = "big"
+           size = "large"
            offset = "-300"
            theme = "light"
          >
@@ -270,7 +301,7 @@ class ExtraInfo extends React.Component {
     render() {
         return (
         <div>
-            <button id="more" onClick={this.showHide}>{this.state.name}</button>
+            <button id="moreButton" onClick={this.showHide}>{this.state.name}</button>
             <ul id ="extra" style={{display:this.state.display}}>
                 <li className="noHover">
                 It is expected that parcel submissions continue to grow in quality and attribute completeness, as well as natural increases in quantity of records. These subtle changes may be reflected in the chart and are not necessarily indicative of errors.
@@ -301,6 +332,26 @@ class InLineErrors extends React.Component {
       for (var i in p){
           var x = i.split("_").join(" ")
           var l = i.split("_")[0]
+          if (l == "Tax") {
+              var ds = {
+                  color: '#53BDAE'
+              }
+          }
+          else if (l == "Address") {
+              var ds = {
+                  color: '#FE9C79'
+              }
+          }
+          else if (l == "General") {
+              var ds = {
+                  color: '#78a75c'
+              }
+          }
+          else {
+              var ds = {
+                  color: 'black'
+              }
+          }
           listArray.push(
             <Tooltip key={i}
                // options
@@ -309,7 +360,7 @@ class InLineErrors extends React.Component {
                   <strong>
                     {x}
                   </strong>
-                  <div dangerouslySetInnerHTML={{ __html: "There were " + p[i] + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
+                  <div style={ds} dangerouslySetInnerHTML={{ __html: "There were " + p[i] + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
                 </div>
               )}
                position="top"
