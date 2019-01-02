@@ -61,9 +61,9 @@ const tax = [
         "PROPCLASS"
       ]
 const catColors = {
-  tax: "#53BDAE",
-  general:"#D3E5CF",
-  address:"#FE9C79"
+  tax: "#004282",
+  general:"#002549",
+  address:"#003466"
 }
 
 class App extends React.Component {
@@ -136,18 +136,17 @@ class App extends React.Component {
               </div>
             )}
            position="bottom"
-           trigger="click"
+           trigger="manual"
            animation = "fade"
            touchHold = "true"
            size = "big"
-           offset = "-300"
+           offset = "0"
            theme = "light"
          >
              <button id="chartbutton">{bar.name ? bar.name : "Click a Value." }</button>
         </Tooltip>
         <hr></hr>
-        //ALIAS will go in the below
-        <div dangerouslySetInnerHTML={{ __html: this.state.explanations.Fields_Diffs[bar.name] + " Click for details."}}></div>
+        <div dangerouslySetInnerHTML={{ __html: bar.name + ": " + this.state.explanations.Fields_Diffs[bar.name] + " Explanation here."}}></div>
        </div>
 
    );
@@ -221,15 +220,43 @@ class App extends React.Component {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
+                    <Tooltest/>
                 <Expand>
                     <Positive positives={fd} fdexp={fdExplained}/>
                     <Zero zeroes={fd} fdexp={fdExplained}/>
                     <Negative negatives={fd} fdexp={fdExplained}/>
                 </Expand>
             </div>
+
          </div>
       );
    }
+}
+class Tooltest extends React.Component{
+  constructor(props){
+    super(props);
+    this.myRef = React.createRef();
+  }
+  showIt(){
+    if ( this.myRef.current){
+      console.log("showing")
+      this.myRef.current.tippy.show()
+    }
+  }
+  render(){
+    return(
+      <Tooltip
+        ref={this.myRef}
+        html={(
+            <div dangerouslySetInnerHTML={{ __html: "There were once dinsoaurs"}}></div>
+        )}
+        trigger="manual"
+        isVisible ="true"
+       >
+         <p>"TESTING"</p>
+      </Tooltip>
+    )
+  }
 }
 class CustomTooltip  extends React.Component{
   render() {
@@ -292,7 +319,6 @@ class ExtraInfo extends React.Component {
     );
     }
 }
-
 class InLineErrors extends React.Component {
     list(){
       var p = this.props.inline
@@ -550,7 +576,7 @@ class Zero extends React.Component {
              offset = "-300"
              theme = "light"
            >
-             <li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
+             <li className="lihover" key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
           </Tooltip>
         );
       }
@@ -599,7 +625,7 @@ class Positive extends React.Component {
              offset = "-300"
              theme = "light"
            >
-             <li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
+             <li className="lihover" key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
           </Tooltip>
 
         );
@@ -648,7 +674,7 @@ class Negative extends React.Component {
              offset = "-300"
              theme = "light"
            >
-             <li key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
+             <li className="lihover" key={i}><a id={i} value={p[i]} id="desc">{i + ": "}</a> {+ p[i]}</li>
           </Tooltip>
         );
       }
@@ -669,7 +695,6 @@ class Negative extends React.Component {
       );
    }
 }
-
 class Expand extends React.Component {
 
    constructor(){

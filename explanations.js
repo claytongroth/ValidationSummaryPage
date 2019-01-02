@@ -84,7 +84,7 @@ const explain = {"County_Info": {
               "OWNERNME2": "-4160",
               "IMPVALUE": "-23843",
               "CNTASSDVALUE": "-22927",
-              "DEEDACRES": "<div><hr><p>IM SOME HTML</p><hr></div>",
+              "DEEDACRES": "Acres of land listed on the deed. This value's explanation here.",
               "TAXROLLYEAR": "-26840",
               "PSTLADRESS": "-25783",
               "IMPROVED": "-23841",
