@@ -161,9 +161,10 @@ class App extends React.Component {
 
        <div className='infoPanel'>
            <div id="tooltip">
-             <strong>
+             <strong id= "infoTitle">
                {bar.name}
              </strong>
+              <hr></hr>
              {sub ? <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div> : <strong>Click on a bar to display info.</strong>}
              <div dangerouslySetInnerHTML={{ __html: text}}></div>
              {pct ? <footer dangerouslySetInnerHTML={{ __html: total}}></footer> :  " "}
@@ -172,6 +173,9 @@ class App extends React.Component {
        </div>
 
    );
+}
+formatY(tickitem){
+  return tickitem + "%"
 }
 
    render() {
@@ -191,8 +195,8 @@ class App extends React.Component {
      const bLLExplained = this.state.explanations.broadLevelErrors;
 
      const coInfo = this.state.validation.County_Info;
-
       return (
+
          <div>
              <div id="summary" className="bricks">
                <h1> {coInfo.CO_NAME.charAt(0) + coInfo.CO_NAME.slice(1).toLowerCase()} Parcel Validation Summary <img className="img-responsive" src="withumb.png" alt="" height="30" width="30"/></h1><hr/>
@@ -214,7 +218,7 @@ class App extends React.Component {
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.<ExtraInfo></ExtraInfo></p>
                 <div id="chart">
-                  <ResponsiveContainer className="chartpair" width="90%" height={50} >
+                  <ResponsiveContainer className="chartpair" width="90%" height={150} >
                     { this.state.selectedBar ? this.renderSelectedBar(this.state.selectedBar) : undefined }
                   </ResponsiveContainer>
                   <ResponsiveContainer width="90%" height={400}>
@@ -222,7 +226,7 @@ class App extends React.Component {
                           margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                        <CartesianGrid strokeDasharray="2 2"/>
                        <XAxis dataKey="name" hide="true"/>
-                       <YAxis/>
+                       <YAxis tickCount={7} tickFormatter={this.formatY}/>
                        <TooltipChart content={<CustomTooltip/>}/>
                        <Legend payload={
                         [
@@ -305,7 +309,7 @@ class ExtraInfo extends React.Component {
                 The chart below is created by comparing your current submission against what was established in the previous year’s parcel data (the final, standardized V4 statewide parcel layer).
                 </li>
                 <li className="noHover">
-                Please take a moment to review this chart. When reviewing an exceptional field perhaps an explanation will be immediately apparent, if not, examine the attribute field for an explanation.  Explanations are uses by the parcel processing team and may be placed in the Explain-Certification.txt.
+                Please take a moment to review this chart. When reviewing an exceptional field perhaps an explanation will be immediately apparent, if not, examine the attribute field for an explanation.  Explanations are uses by the parcel processing team and may be placed in the <a href="https://www.sco.wisc.edu/parcels/Submission_Documentation.pdf#nameddest=inputting_explain_certification" target="_blank">Explain-Certification.txt.</a>
                 </li>
                 <li className="noHover">
                 Note: An exceptional value does not necessarily mean your data is incorrect. This chart is intended to highlight large discrepancies that could indicate missing or incorrect data.
@@ -577,7 +581,7 @@ class Zero extends React.Component {
           <Tooltip key={i}
              // options
              html={(
-              <div id="tooltip">
+              <div id="tippytooltip">
               <strong>
                 {i}
               </strong>
@@ -626,7 +630,7 @@ class Positive extends React.Component {
           <Tooltip key={i}
              // options
              html={(
-              <div id="tooltip">
+              <div id="tippytooltip">
               <strong>
                 {i}
               </strong>
@@ -675,7 +679,7 @@ class Negative extends React.Component {
           <Tooltip key={i}
              // options
              html={(
-              <div id="tooltip">
+              <div id="tippytooltip">
               <strong>
                 {i}
               </strong>

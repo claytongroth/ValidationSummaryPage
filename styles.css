@@ -15,13 +15,14 @@ p {
 }
 .custom-tooltip{
   background-color: white;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 #smallerrors {
   text-align: center;
 }
 
 #summary {
-    width:92.5%;
+    width:96%;
     text-align: center;
 }
 
@@ -68,7 +69,6 @@ p {
     vertical-align: middle;
     overflow-y: scroll;
     height:150px;
-    border-color: #003366;
     margin-right: 1%;
 }
 
@@ -104,32 +104,42 @@ p {
   margin: 0;
   overflow: hidden;
 }
+
 .chartpair{
   text-align: center;
   display: inline-block;
-  height: 105px;
-  max-height: 150px;
 }
 
-#chartbutton{
-  color:#e5eaef;
-  background-color: #003366;
-  border: 2px solid #FFC90E;
-  border-radius: 10%;
-}
-#chartbutton:hover {
-  color:#e5eaef;
-  cursor: pointer;
-  background-color: #7f99b2;
-  border: 2px solid #003366;
-  border-radius: 10%;
-}
+/* chart info box */
 .infoPanel{
   text-align: center;
-  background-color: #7f99b2;
-  height: 150px;
-  max-height: 150px;
+  background-color: white;
+  width: 500px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border-style: solid;
+  border-width: 1px;
+}
+#tooltip{
+  display: inline-block;
+  display: table;
+  width:500px;
+  position: relative;
+  color:	#404040;
+  text-align: left;
+}
+footer {
+    display:inline-block;
+    margin-top: 10px;
+    margin-left: 25px;
+    color: blue;
+}
+/* end chart info box */
 
+#infoTitle{
+  font-size: 150%;
+  color:#004282;
+  -webkit-text-stroke-width: .1px;
+  -webkit-text-stroke-color: #FFC90E;
 }
 .recharts-layer.recharts-bar-rectangle:hover{
   cursor: pointer;
@@ -151,14 +161,13 @@ li {
 #desc{
   font-weight: bold;
 }
-#tooltip{
-  position: relative;
-  color:	#404040;
-  text-align: left;
-  height: 150px;
-  max-height: 150px;
-}
 
+#moreButton:hover{
+  color:#e5eaef;
+  cursor: pointer;
+  background-color: #7f99b2;
+  border: 2px solid #003366;
+}
 #subbutton{
   color:#e5eaef;
   background-color: #003366;
@@ -198,13 +207,7 @@ li {
     background-color: #004282;
     color: white
 }
-footer {
-    position: absolute;
-    text-align: center;
-    color: lightgrey;
-    bottom: 0;
-    left: 50px;
-}
+
 #less {
     color: orange;
 }
