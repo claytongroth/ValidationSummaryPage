@@ -351,7 +351,7 @@ class InLineErrors extends React.Component {
             <Tooltip key={i}
                // options
                html={(
-                <div id="tooltip">
+                <div id="errortooltip">
                   <strong>
                     {x}
                   </strong>
@@ -404,7 +404,7 @@ class BroadLevelErrors extends React.Component {
           <Tooltip key={i}
              // options
              html={(
-              <div id="tooltip">
+              <div id="errortooltip">
               <strong>
                 {z}
               </strong>
@@ -482,7 +482,7 @@ class TaxRoll extends React.Component {
             <Tooltip key={i}
                // options
                html={(
-                <div id="tooltip">
+                <div id="errortooltip">
                 <strong>
                   {z}
                 </strong>
@@ -540,7 +540,7 @@ class MissingRecords extends React.Component {
             <Tooltip key={i}
                // options
                html={(
-                <div id="tooltip">
+                <div id="errortooltip">
                 <strong>
                   {y + t}
                 </strong>

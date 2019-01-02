@@ -110,6 +110,11 @@ p {
   display: inline-block;
 }
 
+#errortooltip{
+  color:	#404040;
+  text-align: left;
+}
+
 /* chart info box */
 .infoPanel{
   text-align: center;
