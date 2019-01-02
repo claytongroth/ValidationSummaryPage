@@ -130,8 +130,8 @@ class App extends React.Component {
       var pct = getPcnt(o, n)
       var less = "<u><b id='less'>fewer</u></b>"
       var more = "<u><b id='more'>more</b></u>"
+      var newV = "<u><b id='more'>new</b></u>"
       var total = pct.toString().replace("-", "") + "%  of " + t + " records"
-
           if (pct > 2.5) {
               var sub = pct + "% " + more + " non-null values than V4 data.<br><br>"
               var text = "There are " + pct + "% " + more + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field. This condition may also be the result of new parcels or new values added to the data (in which case they can be left as is.)"
@@ -151,33 +151,24 @@ class App extends React.Component {
                   var sub = pct + "% " + less + " non-null values than V4 data.<br><br>"
                   var text = "There are " + pct + "% " + less + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field."
               }
+
+          }
+          else if (bar.name && isNaN(pct)){
+              var sub = n + " " + newV + " non-null values added since V4 data submission. <br><br>"
+              var text = "Keep up the good work!"
           }
    return (
 
        <div className='infoPanel'>
-         <Tooltip
-             html={(
-              <div id="tooltip">
-                <strong>
-                  {bar.name}
-                </strong>
-                <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div>
-                <div dangerouslySetInnerHTML={{ __html: text}}></div>
-                <footer dangerouslySetInnerHTML={{ __html: total}}></footer>
-              </div>
-            )}
-           position="bottom"
-           trigger="manual"
-           animation = "fade"
-           touchHold = "true"
-           size = "big"
-           offset = "0"
-           theme = "light"
-         >
-             <button id="chartbutton">{bar.name ? bar.name : "Click a Value." }</button>
-        </Tooltip>
+           <div id="tooltip">
+             <strong>
+               {bar.name}
+             </strong>
+             {sub ? <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div> : <strong>Click on a bar to display info.</strong>}
+             <div dangerouslySetInnerHTML={{ __html: text}}></div>
+             {pct ? <footer dangerouslySetInnerHTML={{ __html: total}}></footer> :  " "}
+           </div>
         <hr></hr>
-        <div dangerouslySetInnerHTML={{ __html: bar.name + ": " + this.state.explanations.Fields_Diffs[bar.name] + " Explanation here."}}></div>
        </div>
 
    );
@@ -251,7 +242,6 @@ class App extends React.Component {
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
-                    <Tooltest/>
                 <Expand>
                     <Positive positives={fd} fdexp={fdExplained}/>
                     <Zero zeroes={fd} fdexp={fdExplained}/>
@@ -263,32 +253,7 @@ class App extends React.Component {
       );
    }
 }
-class Tooltest extends React.Component{
-  constructor(props){
-    super(props);
-    this.myRef = React.createRef();
-  }
-  showIt(){
-    if ( this.myRef.current){
-      console.log("showing")
-      this.myRef.current.tippy.show()
-    }
-  }
-  render(){
-    return(
-      <Tooltip
-        ref={this.myRef}
-        html={(
-            <div dangerouslySetInnerHTML={{ __html: "There were once dinsoaurs"}}></div>
-        )}
-        trigger="manual"
-        isVisible ="true"
-       >
-         <p>"TESTING"</p>
-      </Tooltip>
-    )
-  }
-}
+
 class CustomTooltip  extends React.Component{
   render() {
     const { active } = this.props;

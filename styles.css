@@ -107,6 +107,8 @@ p {
 .chartpair{
   text-align: center;
   display: inline-block;
+  height: 105px;
+  max-height: 150px;
 }
 
 #chartbutton{
@@ -122,9 +124,15 @@ p {
   border: 2px solid #003366;
   border-radius: 10%;
 }
-#infoPanel{
+.infoPanel{
   text-align: center;
+  background-color: #7f99b2;
+  height: 150px;
+  max-height: 150px;
 
+}
+.recharts-layer.recharts-bar-rectangle:hover{
+  cursor: pointer;
 }
 .rechart-wrapper{
   margin: 5px;
@@ -144,8 +152,11 @@ li {
   font-weight: bold;
 }
 #tooltip{
+  position: relative;
   color:	#404040;
   text-align: left;
+  height: 150px;
+  max-height: 150px;
 }
 
 #subbutton{
@@ -188,8 +199,11 @@ li {
     color: white
 }
 footer {
-    text-align: right;
-    color: darkgrey;
+    position: absolute;
+    text-align: center;
+    color: lightgrey;
+    bottom: 0;
+    left: 50px;
 }
 #less {
     color: orange;
