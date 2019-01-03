@@ -10,6 +10,11 @@ p {
     color: #4C4C4C;
 }
 
+
+.reportedValue{
+  font-weight: bold;
+}
+
 #fields {
   text-align: center;
 }
@@ -100,15 +105,20 @@ p {
     height: 300px;
     margin-bottom: 1%;
 }
+/*chart area*/
 #chart{
+  display: flex;
   margin: 0;
   overflow: hidden;
 }
-
 .chartpair{
   text-align: center;
   display: inline-block;
 }
+.chartChart{
+  flex: 1;
+}
+/*end chart area*/
 
 #errortooltip{
   color:	#404040;
@@ -117,17 +127,15 @@ p {
 
 /* chart info box */
 .infoPanel{
-  text-align: center;
   background-color: white;
-  width: 500px;
+  margin-right: 20px;
+  height: 300px;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   border-style: solid;
   border-width: 1px;
 }
 #tooltip{
-  display: inline-block;
-  display: table;
-  width:500px;
+  margin: 5px 10px 5px;
   position: relative;
   color:	#404040;
   text-align: left;
@@ -138,7 +146,6 @@ footer {
     margin-left: 25px;
     color: blue;
 }
-/* end chart info box */
 
 #infoTitle{
   font-size: 150%;
@@ -146,6 +153,9 @@ footer {
   -webkit-text-stroke-width: .1px;
   -webkit-text-stroke-color: #FFC90E;
 }
+/* end chart info box */
+
+
 .recharts-layer.recharts-bar-rectangle:hover{
   cursor: pointer;
 }

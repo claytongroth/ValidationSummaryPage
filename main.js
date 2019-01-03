@@ -164,12 +164,12 @@ class App extends React.Component {
              <strong id= "infoTitle">
                {bar.name}
              </strong>
-              <hr></hr>
+              
              {sub ? <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div> : <strong>Click on a bar to display info.</strong>}
              <div dangerouslySetInnerHTML={{ __html: text}}></div>
              {pct ? <footer dangerouslySetInnerHTML={{ __html: total}}></footer> :  " "}
            </div>
-        <hr></hr>
+
        </div>
 
    );
@@ -218,10 +218,8 @@ formatY(tickitem){
                 <h2>Submission Comparison</h2>
                 <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.<ExtraInfo></ExtraInfo></p>
                 <div id="chart">
-                  <ResponsiveContainer className="chartpair" width="90%" height={150} >
-                    { this.state.selectedBar ? this.renderSelectedBar(this.state.selectedBar) : undefined }
-                  </ResponsiveContainer>
-                  <ResponsiveContainer width="90%" height={400}>
+
+                  <ResponsiveContainer className="chartChart" width="60%" height={400}>
                     <BarChart  data={this.data()}
                           margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                        <CartesianGrid strokeDasharray="2 2"/>
@@ -244,6 +242,9 @@ formatY(tickitem){
                         }
                       </Bar>
                     </BarChart>
+                  </ResponsiveContainer>
+                  <ResponsiveContainer className="chartpair" width="35%" height={150} >
+                    { this.state.selectedBar ? this.renderSelectedBar(this.state.selectedBar) : undefined }
                   </ResponsiveContainer>
                 </div>
                 <Expand>
