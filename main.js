@@ -4,13 +4,13 @@ const TooltipChart = window.Recharts.Tooltip;
 
 // simple function for getting percent change negative or positive.
 function getPcnt(oldNumber, newNumber){
-   var decreaseValue = Math.abs(oldNumber - newNumber);
-   if (newNumber < oldNumber) {
-      return parseInt(((decreaseValue / oldNumber) * 100)*-1);
-   }
-   else {
-     return parseInt((decreaseValue / oldNumber) * 100);
-   }
+  if (newNumber == null){
+    return 0;
+  }else{
+    newNumber = Number(newNumber)
+    var percentDifference = (newNumber / oldNumber) * 100
+    return percentDifference.toLocaleString(navigator.language, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  }
 };
 
 //three variables declared for sorting the data into three categories.
@@ -111,7 +111,7 @@ class App extends React.Component {
             name: i,
             'Percentage of Last Years Value': getPcnt(testValues.County_Info.Legacy[i], testValues.Fields_Diffs[i]),
             cat: general.indexOf(i) > -1 ? "general" : tax.indexOf(i) > -1 ? 'tax' : 'address',
-            tell: ("Last submission: " + testValues.County_Info.Legacy[i] + " This submission: " + testValues.Fields_Diffs[i])
+            tell: ("Last submission: " + (testValues.County_Info.Legacy[i]).toLocaleString(navigator.language, { minimumFractionDigits: 0 }) + "; This submission: " + (Number(testValues.Fields_Diffs[i]) +  testValues.County_Info.Legacy[i]).toLocaleString(navigator.language, { minimumFractionDigits: 0 }))
           })
            }
     }
@@ -144,7 +144,7 @@ class App extends React.Component {
       var less = "<u><b id='less'>fewer</u></b>"
       var more = "<u><b id='more'>more</b></u>"
       var newV = "<u><b id='more'>new</b></u>"
-      var total = pct.toString().replace("-", "") + "%  of " + t + " records"
+      var total = pct.toString().replace("-", "") + "%  (" + Math.abs(Number(n)).toLocaleString(navigator.language, { minimumFractionDigits: 0 }) + " of " + Number(o).toLocaleString(navigator.language, { minimumFractionDigits: 0 }) + " records)"
           if (pct > 2.5) {
               var sub = pct + "% " + more + " non-null values than V4 data.<br><br>"
               var text = "There are " + pct + "% " + more + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field. This condition may also be the result of new parcels or new values added to the data (in which case they can be left as is.)"
@@ -155,14 +155,14 @@ class App extends React.Component {
               var text = "There are " + pct + "% " + less + " "+ bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field."
           }
           else if (pct > -2.5 && pct < 2.5) {
-              if (pct < 2.5) {
+              if ((pct < 2.5) && (pct > 0)) {
                   var sub = pct + "% " + more + " non-null values than V4 data.<br><br>"
-                  var text = "There are " + pct + "% " + more + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field. This condition may also be the result of new parcels or new values added to the data (in which case they can be left as is.)"
+                  var text = "There are " + pct + "% " + more + " " + bar.name + " values than the number present in the final V4 data."
               }
-              else if (pct > -2.5) {
+              else if ((pct > -2.5) && (pct < 0)) {
                   pct = pct.toString().replace("-", "")
                   var sub = pct + "% " + less + " non-null values than V4 data.<br><br>"
-                  var text = "There are " + pct + "% " + less + " " + bar.name + " values than the number present in the final V4 data. This condition suggests there may be a problem within the " + bar.name + " field, please examine this field."
+                  var text = "There are " + pct + "% " + less + " " + bar.name + " values than the number present in the final V4 data."
               }
 
           }
