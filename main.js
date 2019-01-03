@@ -278,7 +278,7 @@ class CustomTooltip  extends React.Component{
       const { payload, label } = this.props;
       return (
         <div className="custom-tooltip">
-          <p className="label">{`${label} : ${payload[0].value}`}%</p>
+          <p className="label"><b>{label}</b> {":" + payload[0].value}%</p>
           <p className="intro">{payload[0].payload.tell}</p>
           <p className="desc">Click for field details.</p>
         </div>
