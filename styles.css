@@ -10,6 +10,9 @@ p {
     color: #4C4C4C;
 }
 
+.tippy-tooltip{
+  border-radius: 0px !important;
+}
 
 #reportedValue{
   font-weight: bold !important;
