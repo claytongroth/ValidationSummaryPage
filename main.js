@@ -2,7 +2,7 @@ const Tooltip = reactTippy.Tooltip;
 const {ResponsiveContainer, BarChart, Bar, ReferenceLine, XAxis, YAxis, CartesianGrid, Legend, Cell} = window.Recharts;
 const TooltipChart = window.Recharts.Tooltip;
 
-
+// simple function for getting percent change negative or positive.
 function getPcnt(oldNumber, newNumber){
    var decreaseValue = Math.abs(oldNumber - newNumber);
    if (newNumber < oldNumber) {
@@ -12,6 +12,8 @@ function getPcnt(oldNumber, newNumber){
      return parseInt((decreaseValue / oldNumber) * 100);
    }
 };
+
+//three variables declared for sorting the data into three categories.
 const address = ["SUFFIX",
               "STREETTYPE",
               "STREETNAME",
@@ -60,12 +62,14 @@ const tax = [
         "ESTFMKVALUE",
         "PROPCLASS"
       ]
+// Variable declared for the colors for each category
 const catColors = {
   tax: "#004282",
   general:"#002549",
   address:"#003466"
 }
 
+// This is the main App component
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -78,6 +82,7 @@ class App extends React.Component {
       explanations: [],
     };
   }
+  // when the component mounts we set the state to contain the values from the output JSON, they are in the console in a callback funtion.
   componentWillMount(){
     this.setState({
       validation: testValues,
@@ -85,8 +90,10 @@ class App extends React.Component {
     }, () => console.log("State: ", this.state.validation, this.state.explanations)
   )
   }
+  //this function creates the data we want to work with for the chart out of the raw output JSON
   data(){
     var data=[]
+
     for (let i in testValues.County_Info.Legacy){
         // if change is zero don't display if old value is zero and new is X explain.
         if ((testValues.County_Info.Legacy[i] === 0) && (!(testValues.Fields_Diffs[i] === "0")) ){
@@ -97,6 +104,7 @@ class App extends React.Component {
            tell: ("There are: " + testValues.Fields_Diffs[i] + " new values since last submission.")
            })
         }
+        // if neither field is null push the record.
          if ( (!(testValues.County_Info.Legacy[i] === null) && !(testValues.Fields_Diffs[i] === null)) ){
            //console.log("Field: ", i, "LEGACY: ", testValues.County_Info.Legacy[i], "New Value: ", testValues.Fields_Diffs[i])
            data.push({
@@ -107,7 +115,9 @@ class App extends React.Component {
           })
            }
     }
+    // filter the records for NaN percentages.
     data = data.filter(x => (!isNaN(x['Percentage of Last Years Value']) && !(x['Percentage of Last Years Value'] === 0)) )
+    //sort the data by category so that each category is clumped on the graph.
     data = data.sort(function(a,b){
       var categoryA = a.cat.toLowerCase(), categoryB = b.cat.toLowerCase()
       if (categoryA > categoryB){
@@ -120,10 +130,13 @@ class App extends React.Component {
     //console.log(data)
    return data
   }
+  // the selected bar state is changed when this function fires
   onBarClick(bar) {
     this.setState({selectedBar: bar});
   }
+  // this function updates the chart info panel beside the chart whenever the selected bar changes
   renderSelectedBar(bar) {
+    // the following code generates the unique messages for each of the breakpoints >2.5%, <2.5% and if there were new values added with no previous existing values in the legacy data.
       var n = testValues.Fields_Diffs[bar.name]
       var o = testValues.County_Info.Legacy[bar.name]
       var t = testValues.County_Info.Total_Records
@@ -157,27 +170,25 @@ class App extends React.Component {
               var sub = n + " " + newV + " non-null values added since V4 data submission. <br><br>"
               var text = "Keep up the good work!"
           }
-   return (
+       return (
+           <div className='infoPanel'>
+               <div id="tooltip">
+                 <strong id= "infoTitle">
+                   {bar.name}
+                 </strong>
 
-       <div className='infoPanel'>
-           <div id="tooltip">
-             <strong id= "infoTitle">
-               {bar.name}
-             </strong>
-
-             {sub ? <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div> : <strong>Click on a bar to display info.</strong>}
-             <div dangerouslySetInnerHTML={{ __html: text}}></div>
-             {pct ? <footer dangerouslySetInnerHTML={{ __html: total}}></footer> :  " "}
+                 {sub ? <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div> : <strong>Click on a bar to display info.</strong>}
+                 <div dangerouslySetInnerHTML={{ __html: text}}></div>
+                 {pct ? <footer dangerouslySetInnerHTML={{ __html: total}}></footer> :  " "}
+               </div>
            </div>
-
-       </div>
-
-   );
-}
-formatY(tickitem){
-  return tickitem + "%"
-}
-
+       );
+    }
+    // Function to add % signs to the Yaxis
+    formatY(tickitem){
+      return tickitem + "%"
+    }
+    //main render function of the App component
    render() {
      const mr = this.state.validation.Records_Missing;
      const mrExplained = this.state.explanations.Records_Missing;
@@ -259,6 +270,7 @@ formatY(tickitem){
    }
 }
 
+// This component is for the hover tooltips on the chart area.
 class CustomTooltip  extends React.Component{
   render() {
     const { active } = this.props;
@@ -275,7 +287,7 @@ class CustomTooltip  extends React.Component{
     return null;
   }
 };
-
+//This component renders the "more" information above the chart.
 class ExtraInfo extends React.Component {
     constructor(){
       super();
@@ -320,6 +332,7 @@ class ExtraInfo extends React.Component {
     );
     }
 }
+//This component renders the list of inline errors items and sets up a tooltip on them to render on click.
 class InLineErrors extends React.Component {
     list(){
       var p = this.props.inline
@@ -384,6 +397,7 @@ class InLineErrors extends React.Component {
     );
     }
 }
+//This component renders the list of broad level errors items and sets up a tooltip on them to render on click.
 class BroadLevelErrors extends React.Component {
   list(){
     var p = this.props.broadLevel
@@ -438,6 +452,7 @@ class BroadLevelErrors extends React.Component {
     );
   }
 }
+////This component renders the list of Taxroll errors items and sets up a tooltip on them to render on click.
 class TaxRoll extends React.Component {
     list(){
       var p = this.props.taxroll
@@ -571,6 +586,7 @@ class MissingRecords extends React.Component {
       );
     }
 }
+// The following three components render the lists of Positive, Negative, and Zero value fields in the expandable area below the chart. They also setup a tooltip
 class Zero extends React.Component {
   list(){
     var p = this.props.zeroes
@@ -716,6 +732,7 @@ class Negative extends React.Component {
       );
    }
 }
+// This component renders the expandable area below the chart theat houses the above three components : Zero, Positive, Negative
 class Expand extends React.Component {
 
    constructor(){
