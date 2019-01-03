@@ -11,8 +11,9 @@ p {
 }
 
 
-.reportedValue{
-  font-weight: bold;
+#reportedValue{
+  font-weight: bold !important;
+  color: red !important;
 }
 
 #fields {

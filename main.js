@@ -164,7 +164,7 @@ class App extends React.Component {
              <strong id= "infoTitle">
                {bar.name}
              </strong>
-              
+
              {sub ? <div dangerouslySetInnerHTML={{ __html: "<br>" + sub}}></div> : <strong>Click on a bar to display info.</strong>}
              <div dangerouslySetInnerHTML={{ __html: text}}></div>
              {pct ? <footer dangerouslySetInnerHTML={{ __html: total}}></footer> :  " "}
@@ -356,7 +356,7 @@ class InLineErrors extends React.Component {
                   <strong>
                     {x}
                   </strong>
-                  <div style={ds} dangerouslySetInnerHTML={{ __html: "There were " + p[i] + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
+                  <div style={ds} dangerouslySetInnerHTML={{ __html: "There were " + '<a id="reportedValue">' + p[i] +'</a>' + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
                 </div>
               )}
                position="top"
@@ -452,28 +452,28 @@ class TaxRoll extends React.Component {
           var t = ""
 
           if (i == "Previous_Taxroll_Year") {
-              var h = p[i] + "% of the TAXROLLYEAR field contains previous (" + d + ") tax roll year values.<br>"
+              var h = '<a id="reportedValue">' + p[i] + "%" + '</a>' + " of the TAXROLLYEAR field contains previous (" + d + ") tax roll year values.<br>"
 
               if (p[i] > 0) {
                   var t = "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
               }
           }
           else if (i == "Expected_Taxroll_Year") {
-              var h = p[i] + "% of the TAXROLLYEAR field contains expected (" + d + ") tax roll year values.<br>"
+              var h = '<a id="reportedValue">' + p[i] + "%" + '</a>' + " of the TAXROLLYEAR field contains expected (" + d + ") tax roll year values.<br>"
 
               if (p[i] <= 97) {
                   var t = " Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and expected TAXROLLYEAR values should account for no less than 97% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt. <br> *Note that non-parcel features, such as ROW or Hydro, are excluded from this summary."
               }
           }
           else if (i == "Other_Taxroll_Years") {
-                  var h = "0% of the TAXROLLYEAR field contains values other than the previous (" + (d - 1) + "), future (" + (d + 1) + "), or expected (" + d + ") tax roll year.<br>"
+                  var h = '<a id="reportedValue">' + "0%" + '</a>' + " of the TAXROLLYEAR field contains values other than the previous (" + (d - 1) + "), future (" + (d + 1) + "), or expected (" + d + ") tax roll year.<br>"
 
                   if (p[i] > 0) {
                       var t = "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
               }
           }
           else if (i == "Future_Taxroll_Years") {
-              var h = p[i] + "% of the TAXROLLYEAR field contains future (" + d + ") tax roll year values.<br>"
+              var h = '<a id="reportedValue">' + p[i] + "%" + '</a>' +  " of the TAXROLLYEAR field contains future (" + d + ") tax roll year values.<br>"
 
               if (p[i] >= 3) {
                   var t = "Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and future TAXROLLYEAR values should account for no more than 3% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
@@ -523,7 +523,7 @@ class MissingRecords extends React.Component {
           var x = i.split("_").join(" ")
           var y = x.split(" ")[1]
           if (e[i] > 0) {
-              var innerText = "There are " + e[i] + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
+              var innerText = "There are " + '<a id="reportedValue">' + e[i]  + '</a>'  + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
           }
           else if (e[i] == 0) {
               var innerText = "There are 0 missing values in this field, no action required."
