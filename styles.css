@@ -137,7 +137,12 @@ p {
   color:	#404040;
   text-align: left;
 }
-
+.normal-text{
+  font-weight:normal !important;
+}
+.attention-required{
+  font-style: italic;
+}
 /* chart info box */
 .infoPanel{
   background-color: white;

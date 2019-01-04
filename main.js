@@ -397,6 +397,16 @@ class InLineErrors extends React.Component {
     );
     }
 }
+// Messages included in popup of each respective Broad Level error:
+var Geometric_Misplacement_Flag_Link = "Please review the directives in the documentation here: <a href='http://www.sco.wisc.edu/parcels/tools/FieldMapping/Parcel_Schema_Field_Mapping_Guide.pdf' target='_blank'>http://www.sco.wisc.edu/parcels/tools/FieldMapping/Parcel_Schema_Field_Mapping_Guide.pdf</a> (section #2) for advice on how to project native data to the Statewide Parcel CRS."
+var Coded_Domain_Fields_Link = "Please ensure that all coded domains are removed from the feature class before submitting."
+var Geometric_File_Error_Link = "Please review the directives in the documentation here: <a href='https://www.sco.wisc.edu/parcels/tools/Validation/Validation_and_Submission_Tool_Guide.pdf#nameddest=geometric_file_errors' target='_blank'>https://www.sco.wisc.edu/parcels/tools/Validation/Validation_and_Submission_Tool_Guide.pdf#nameddest=geometric_file_errors</a>"
+var Geometric_Misplacement_Flag_Pre = ""
+var Coded_Domain_Fields_Pre = "<text class='normal-text'>The following fields contain coded domains or subtypes: </text>"
+var Geometric_File_Error_Pre = ""
+var Geometric_Misplacement_Flag_Attn = "Geometries appear to be misplaced."
+var Coded_Domain_Fields_Attn = "Coded domains or subtypes were found."
+var Geometric_File_Error_Attn = "Click for detail."
 //This component renders the list of broad level errors items and sets up a tooltip on them to render on click.
 class BroadLevelErrors extends React.Component {
   list(){
@@ -404,26 +414,25 @@ class BroadLevelErrors extends React.Component {
     var e = this.props.broadLevelexp
     var listArray = []
     for (var i in p){
-        var x = i.split("_").join(" ")
-        if (p[i] == "None") {
+        console.log(i)
+       var x = i.split("_").join(" ")
+        if ((p[i] == "None")||(p[i] == "")) {
             var z = "No action required"
-            var t = "No broad-level geometric errors found!"
+            var t = "No broad-level errors found!"
             var y = ""
         }
-        else if (p[i] != "None") {
-            var z = p[i]
-            var t = p[i]
-            var y = "Please review the directives in the documentation here: "
+        else if ((p[i] != "None")&&(p[i] != "")) {
+            var z = "<p>" + window[ i + "_Pre"] + "</p><p><b>" + p[i] + "</b>"
+            var t = "<text class='attention-required'>Attention required! </text>" + window[ i + "_Attn"]
+            var y = window[ i + "_Link"]
         }
         listArray.push(
           <Tooltip key={i}
              // options
              html={(
               <div id="errortooltip">
-              <strong>
-                {z}
-              </strong>
-              <div dangerouslySetInnerHTML={{ __html: y}}></div>
+              <p dangerouslySetInnerHTML={{ __html: z}}></p>
+              <p dangerouslySetInnerHTML={{ __html: y}}></p>
               </div>
             )}
              position="top"
@@ -434,7 +443,7 @@ class BroadLevelErrors extends React.Component {
              offset = "-300"
              theme = "light"
            >
-             <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {t}</li>
+             <li className="lihover" id={i} key={i}><b>{x + ": "}</b> <text dangerouslySetInnerHTML={{ __html: t}}></text></li>
           </Tooltip>
 
         );
@@ -538,8 +547,8 @@ class MissingRecords extends React.Component {
       for (var i in p){
           var x = i.split("_").join(" ")
           var y = x.split(" ")[1]
-          if (e[i] > 0) {
-              var innerText = "There are " + '<a id="reportedValue">' + e[i]  + '</a>'  + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
+          if (p[i] > 0) {
+              var innerText = "There are " + '<a id="reportedValue">' + p[i]  + '</a>'  + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
           }
           else if (e[i] == 0) {
               var innerText = "There are 0 missing values in this field, no action required."
