@@ -13,6 +13,10 @@ p {
 .tippy-tooltip{
   border-radius: 0px !important;
 }
+.tippy-popper{
+  pointer-events: all !important;
+  word-break: break-word;
+}
 
 #reportedValue{
   font-weight: bold !important;
@@ -32,7 +36,7 @@ p {
 }
 
 #summary {
-    width:96%;
+    width:95%;
     text-align: center;
 }
 
@@ -43,32 +47,36 @@ p {
 
 #row{
   height: auto;
+  width: calc(95% + 4px);
+  margin-left: calc(2.5% - 2px);
   -ms-text-justify: distribute-all-lines;
   text-justify: distribute-all-lines;
 }
 .bricks {
     border: 2px solid #818181; /*#337ab7;*/
     border-radius: 2px;
-    padding: 1px;
     background-color: #ECECEC;
     margin: auto;
     margin-top: 1%;
-    margin-left: 2%;
 }
 #inline, #broad  {
     display: inline-block;
     vertical-align: top;
-    width: 45%;
+    width: calc(48.75% - 4px);
     height:350px;
     overflow: auto;
+    word-break: break-word;
     /*height: auto;
     min-height: 325px;
     min-width: 400px;*/
 }
+#broad{
+   float: right;
+}
 
 #comparison{
-  width: auto;
-  margin-right: 5%;
+  width: 95%;
+  margin-left: calc(2.5% - 2px);
 }
 
 #comparison h2 {
