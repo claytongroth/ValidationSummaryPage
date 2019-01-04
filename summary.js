@@ -56,14 +56,14 @@ var testValues = {
   },
   "inLineErrors": {
       "Tax_Errors": "0",
-      "Address_Errors": "84",
-      "General_Errors": "0",
+      "Address_Errors": "84000",
+      "General_Errors": "1000",
       "Geometric_Errors": "0"
   },
   "Records_Missing": {
-      "Missing_CONAME": "0",
-      "Missing_PARCELSRC": "0",
-      "Missing_PARCELFIPS": "0"
+      "Missing_CONAME": "2",
+      "Missing_PARCELSRC": "7000",
+      "Missing_PARCELFIPS": "6"
   },
   "Fields_Diffs": {
       "PLACENAME": "159",

@@ -341,19 +341,20 @@ class InLineErrors extends React.Component {
       for (var i in p){
           var x = i.split("_").join(" ")
           var l = i.split("_")[0]
+          var lv = (Number(p[i])).toLocaleString(navigator.language, { minimumFractionDigits: 0 })
           if (l == "Tax") {
               var ds = {
-                  color: '#53BDAE'
+                  color: catColors.tax
               }
           }
           else if (l == "Address") {
               var ds = {
-                  color: '#FE9C79'
+                  color: catColors.address
               }
           }
           else if (l == "General") {
               var ds = {
-                  color: '#78a75c'
+                  color: catColors.general
               }
           }
           else {
@@ -369,7 +370,7 @@ class InLineErrors extends React.Component {
                   <strong>
                     {x}
                   </strong>
-                  <div style={ds} dangerouslySetInnerHTML={{ __html: "<br>" + "There were " + '<a id="reportedValue">' + p[i] +'</a>' + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
+                  <div style={ds} dangerouslySetInnerHTML={{ __html: "<br>" + "There were " + '<a id="reportedValue">' + lv +'</a>' + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
                 </div>
               )}
                position="top"
@@ -380,7 +381,7 @@ class InLineErrors extends React.Component {
                offset = "-300"
                theme = "light"
              >
-               <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {+ p[i]}</li>
+               <li style={ds} className="lihover" id={i} key={i}><b>{x + ": "}</b> {lv}</li>
             </Tooltip>
 
           );
@@ -398,9 +399,9 @@ class InLineErrors extends React.Component {
     }
 }
 // Messages included in popup of each respective Broad Level error:
-var Geometric_Misplacement_Flag_Link = "Please review the directives in the documentation here: <a href='http://www.sco.wisc.edu/parcels/tools/FieldMapping/Parcel_Schema_Field_Mapping_Guide.pdf' target='_blank'>http://www.sco.wisc.edu/parcels/tools/FieldMapping/Parcel_Schema_Field_Mapping_Guide.pdf</a> (section #2) for advice on how to project native data to the Statewide Parcel CRS."
+var Geometric_Misplacement_Flag_Link = "Please review the directives in the documentation here: <a class='breakable' href='http://www.sco.wisc.edu/parcels/tools/FieldMapping/Parcel_Schema_Field_Mapping_Guide.pdf' target='_blank'>http://www.sco.wisc.edu/parcels/tools/FieldMapping/Parcel_Schema_Field_Mapping_Guide.pdf</a> (section #2) for advice on how to project native data to the Statewide Parcel CRS."
 var Coded_Domain_Fields_Link = "Please ensure that all coded domains are removed from the feature class before submitting."
-var Geometric_File_Error_Link = "Please review the directives in the documentation here: <a href='https://www.sco.wisc.edu/parcels/tools/Validation/Validation_and_Submission_Tool_Guide.pdf#nameddest=geometric_file_errors' target='_blank'>https://www.sco.wisc.edu/parcels/tools/Validation/Validation_and_Submission_Tool_Guide.pdf#nameddest=geometric_file_errors</a>"
+var Geometric_File_Error_Link = "Please review the directives in the documentation here: <a class='breakable' href='https://www.sco.wisc.edu/parcels/tools/Validation/Validation_and_Submission_Tool_Guide.pdf#nameddest=geometric_file_errors' target='_blank'>https://www.sco.wisc.edu/parcels/tools/Validation/Validation_and_Submission_Tool_Guide.pdf#nameddest=geometric_file_errors</a>"
 var Geometric_Misplacement_Flag_Pre = ""
 var Coded_Domain_Fields_Pre = "<text class='normal-text'>The following fields contain coded domains or subtypes: </text>"
 var Geometric_File_Error_Pre = ""
@@ -422,7 +423,8 @@ class BroadLevelErrors extends React.Component {
             var y = ""
         }
         else if ((p[i] != "None")&&(p[i] != "")) {
-            var z = "<p>" + window[ i + "_Pre"] + "</p><p><b>" + p[i] + "</b>"
+            var splitable = String(p[i])
+            var z = "<p>" + window[ i + "_Pre"] + "</p><p><b>" + splitable.split(" Please see ")[0] + "</b>"
             var t = "<text class='attention-required'>Attention required! </text>" + window[ i + "_Attn"]
             var y = window[ i + "_Link"]
         }
@@ -479,28 +481,28 @@ class TaxRoll extends React.Component {
               var h = "<br>" + '<a id="reportedValue">' + p[i] + "%" + '</a>' + " of the TAXROLLYEAR field contains previous (" + d + ") tax roll year values.<br><br>"
 
               if (p[i] > 0) {
-                  var t = "<br>" + "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
+                  var t = "<br>" + "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the <a href='https://www.sco.wisc.edu/parcels/Submission_Documentation.pdf#nameddest=inputting_explain_certification' target='_blank'>Explain-Certification.txt.</a>"
               }
           }
           else if (i == "Expected_Taxroll_Year") {
               var h = "<br>" + '<a id="reportedValue">' + p[i] + "%" + '</a>' + " of the TAXROLLYEAR field contains expected (" + d + ") tax roll year values.<br>"
 
               if (p[i] <= 97) {
-                  var t = "<br>" + " Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and expected TAXROLLYEAR values should account for no less than 97% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt. <br><br> *Note that non-parcel features, such as ROW or Hydro, are excluded from this summary."
+                  var t = "<br>" + " Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and expected TAXROLLYEAR values should account for no less than 97% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the <a href='https://www.sco.wisc.edu/parcels/Submission_Documentation.pdf#nameddest=inputting_explain_certification' target='_blank'>Explain-Certification.txt.</a>. <br><br> *Note that non-parcel features, such as ROW or Hydro, are excluded from this summary."
               }
           }
           else if (i == "Other_Taxroll_Years") {
                   var h = "<br>" + '<a id="reportedValue">' + "0%" + '</a>' + " of the TAXROLLYEAR field contains values other than the previous (" + (d - 1) + "), future (" + (d + 1) + "), or expected (" + d + ") tax roll year.<br><br>"
 
                   if (p[i] > 0) {
-                      var t = "<br>" + "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
+                      var t = "<br>" + "Ensure that all TAXROLLYEAR values are valid and make sure to update other attributes appropriately so that this data is of the appropriate vintage. Under normal circumstances, the expected and future TAXROLLYEAR values should equal 100%. If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the <a href='https://www.sco.wisc.edu/parcels/Submission_Documentation.pdf#nameddest=inputting_explain_certification' target='_blank'>Explain-Certification.txt.</a>."
               }
           }
           else if (i == "Future_Taxroll_Years") {
               var h = "<br>" + '<a id="reportedValue">' + p[i] + "%" + '</a>' +  " of the TAXROLLYEAR field contains future (" + d + ") tax roll year values.<br><br>"
 
               if (p[i] >= 3) {
-                  var t = "<br>" + "Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and future TAXROLLYEAR values should account for no more than 3% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the Explain-Certification.txt."
+                  var t = "<br>" + "Under normal circumstances, the expected (" + d + ") and future (" + (d + 1) + ") TAXROLLYEAR values should equal 100% and future TAXROLLYEAR values should account for no more than 3% of this field. Parcels may carry the future TAXROLLYEAR if the parcel will not be assessed until the next tax year (e.g. a split). If TAXROLLYEAR values cannot be of the appropriate vintage, please include a general explanation of this in the <a href='https://www.sco.wisc.edu/parcels/Submission_Documentation.pdf#nameddest=inputting_explain_certification' target='_blank'>Explain-Certification.txt.</a>."
               }
           }
           listArray.push(
@@ -547,8 +549,9 @@ class MissingRecords extends React.Component {
       for (var i in p){
           var x = i.split("_").join(" ")
           var y = x.split(" ")[1]
+          var lv = (Number(p[i])).toLocaleString(navigator.language, { minimumFractionDigits: 0 })
           if (p[i] > 0) {
-              var innerText = "There are " + '<a id="reportedValue">' + p[i]  + '</a>'  + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
+              var innerText = "There are " + '<a id="reportedValue">' +  lv + '</a>'  + " missing values in this field. Please ensure that all values in the " + y + " field are populated appropriately."
           }
           else if (e[i] == 0) {
               var innerText = "There are 0 missing values in this field, no action required."
@@ -562,14 +565,13 @@ class MissingRecords extends React.Component {
           else if (y.charAt(y.length - 1) == "S") {
               var t = " (Parcel Source FIPS)"
           }
+          var fieldName = "<text class='bold-fieldname'>" + y + t + "</tex><br><br>"
           listArray.push(
             <Tooltip key={i}
                // options
                html={(
                 <div id="errortooltip">
-                <strong>
-                  {y + t}
-                </strong>
+                <div dangerouslySetInnerHTML={{ __html: fieldName}}></div>
                 <div dangerouslySetInnerHTML={{ __html: innerText}}></div>
                 </div>
               )}
@@ -581,7 +583,7 @@ class MissingRecords extends React.Component {
                offset = "-300"
                theme = "light"
              >
-               <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {+ p[i]}</li>
+               <li className="lihover" id={i} key={i}><b>{x + ": "}</b> {lv}</li>
             </Tooltip>
           );
       }

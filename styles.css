@@ -143,6 +143,12 @@ p {
 .attention-required{
   font-style: italic;
 }
+.breakable{
+  word-break: break-all;
+}
+.bold-fieldname{
+  font-weight:bold;
+}
 /* chart info box */
 .infoPanel{
   background-color: white;
@@ -186,7 +192,7 @@ footer {
 }
 
 .lihover:hover {
-  color: #FFC90E;
+  color: #FFC90E !important;
   cursor: pointer;
 }
 
