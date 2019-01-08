@@ -80,6 +80,7 @@ class App extends React.Component {
       items: [],
       validation: [],
       explanations: [],
+      helpName: "Start Tutorial"
     };
   }
   // when the component mounts we set the state to contain the values from the output JSON, they are in the console in a callback funtion.
@@ -188,6 +189,16 @@ class App extends React.Component {
     formatY(tickitem){
       return tickitem + "%"
     }
+
+    startHelp =() => {
+      if (this.state.helpName == 'Stop!') {
+          this.setState({helpName:"Start Tutorial"})
+          administerTutorial("stop")
+      } else {
+          this.setState({helpName:"Stop!"})
+          administerTutorial("start")
+      }
+    }
     //main render function of the App component
    render() {
      const mr = this.state.validation.Records_Missing;
@@ -209,9 +220,10 @@ class App extends React.Component {
       return (
 
          <div>
+             <button id="helpButton" onClick={this.startHelp}>{this.state.helpName}</button>
              <div id="summary" className="bricks">
                <h1> {coInfo.CO_NAME.charAt(0) + coInfo.CO_NAME.slice(1).toLowerCase()} Parcel Validation Summary <img className="img-responsive" src="withumb.png" alt="" height="30" width="30"/></h1><hr/>
-               <p>This validation summary page contains an overview of any errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
+               <p>This validation summary page contains an overview of <i>possible</i> errors found by the Parcel Validation Tool. Please review the contents of this file and make changes to your parcel dataset as necessary.</p>
              </div>
              <div id="row">
                 <div id="inline" className="bricks">
@@ -227,10 +239,10 @@ class App extends React.Component {
               </div>
             <div id="comparison" className="bricks">
                 <h2>Submission Comparison</h2>
-                <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data.<ExtraInfo></ExtraInfo></p>
+                <p>BELOW IS A COMPARISON OF COMPLETENESS VALUES FROM YOUR PREVIOUS PARCEL SUBMISSION AND THIS CURRENT SUBMISSION. <text class='attention'>If the value shown is a seemingly large negative number, please verify that all data was joined correctly and no data was lost during processing</text>. Note: This does not necessarily mean your data is incorrect, we just want to highlight large discrepancies that could indicate missing or incorrect data. <text class="click-note">(click element for info)</text><ExtraInfo></ExtraInfo></p>
                 <div id="chart">
 
-                  <ResponsiveContainer className="chartChart" width="60%" height={400}>
+                  <ResponsiveContainer className="chartChart" width="60%" height={350}>
                     <BarChart  data={this.data()}
                           margin={{top: 5, right: 30, left: 20, bottom: 5}}>
                        <CartesianGrid strokeDasharray="2 2"/>
@@ -338,26 +350,32 @@ class InLineErrors extends React.Component {
       var p = this.props.inline
       var e = this.props.inlineexp
       var listArray = []
-      for (var i in p){
+      var taxOrderAray = ["General_Errors","Address_Errors","Tax_Errors","Geometric_Errors"] // Determines the order of elements from top to bottom 
+      for (var l in taxOrderAray){
+          var i = taxOrderAray[l]
           var x = i.split("_").join(" ")
           var l = i.split("_")[0]
           var lv = (Number(p[i])).toLocaleString(navigator.language, { minimumFractionDigits: 0 })
           if (l == "Tax") {
+              x = "Tax Roll Element Errors"
               var ds = {
                   color: catColors.tax
               }
           }
           else if (l == "Address") {
+              x = "Address Element Errors"
               var ds = {
                   color: catColors.address
               }
           }
           else if (l == "General") {
+              x = "General Element Errors"
               var ds = {
                   color: catColors.general
               }
           }
           else {
+              x = "Geometric Element Errors"
               var ds = {
                   color: 'black'
               }
@@ -370,7 +388,7 @@ class InLineErrors extends React.Component {
                   <strong>
                     {x}
                   </strong>
-                  <div style={ds} dangerouslySetInnerHTML={{ __html: "<br>" + "There were " + '<a id="reportedValue">' + lv +'</a>' + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
+               <div style={ds} dangerouslySetInnerHTML={{ __html: "<br>" + "There were " + '<a id="reportedValue">' + lv +'</a>' + " errors found that relate to " + l.toLowerCase() + " attributes in the feature class. To review these errors, sort descending on the " + x + " field, which was added to your output feature class while executing the tool."}}></div>
                 </div>
               )}
                position="top"
@@ -381,7 +399,7 @@ class InLineErrors extends React.Component {
                offset = "-300"
                theme = "light"
              >
-               <li style={ds} className="lihover" id={i} key={i}><b>{x + ": "}</b> {lv}</li>
+               <li /*style={ds}*/ className="lihover" id={i} key={i}><b>{x + ": "}</b> {lv}</li>
             </Tooltip>
 
           );
@@ -392,7 +410,7 @@ class InLineErrors extends React.Component {
     return (
      <div>
        <h2 id = "smallerrors"> In Line Errors</h2>
-       <p>The following lines summarize the element-specific errors that were found while validating your parcel dataset.  The stats below are meant as a means of reviewing the output.  Please see the GeneralElementErrors, AddressElementErrors, TaxrollElementErrors, and GeometricElementErrors fields within the output feature class to address these errors individually.</p>
+       <p>The following lines summarize the element-specific errors that were found while validating your parcel dataset.  The stats below are meant as a means of reviewing the output.  <text class='attention'>Please see the GeneralElementErrors, AddressElementErrors, TaxrollElementErrors, and GeometricElementErrors fields within the output feature class to address these errors individually</text>. <text class="click-note">(click element for info)</text></p>
         <ul className="data"> {this.list()}</ul>
      </div>
     );
@@ -457,7 +475,7 @@ class BroadLevelErrors extends React.Component {
        <div>
         <h2 id = "smallerrors"> Broad Level Errors</h2>
         <p>The following lines explain any broad geometric errors that were found while validating your parcel dataset.
-        If any of the "Missing Records" values are greater than 0, please add missing values.</p>
+        If any of the "Missing Records" values are greater than 0, please add missing values. <text class="click-note">(click element for info)</text></p>
         <ul className="data"> {this.list()}</ul>
        </div>
     );
@@ -469,15 +487,22 @@ class TaxRoll extends React.Component {
       var p = this.props.taxroll
       var e = this.props.taxrollexp
       var listArray = []
-      for (var i in p){
+      var orderArray = ["Expected_Taxroll_Year", "Previous_Taxroll_Year", "Future_Taxroll_Years", "Other_Taxroll_Years"] // Determines the order to which the elements appear from top to bottom
+      for (var l in orderArray){
+          console.log(orderArray[l])
+          console.log(p)
+
+          var i = orderArray[l]
+          console.log(i)
           var x = i.split("_").join(" ")
           var z = x.replace(/Taxroll/g, "Tax Roll")
           var d = new Date()
           var d = d.getFullYear()
           var h = ""
           var t = ""
-
+          var year = "2018"
           if (i == "Previous_Taxroll_Year") {
+              year = " (2017)"
               var h = "<br>" + '<a id="reportedValue">' + p[i] + "%" + '</a>' + " of the TAXROLLYEAR field contains previous (" + d + ") tax roll year values.<br><br>"
 
               if (p[i] > 0) {
@@ -485,6 +510,7 @@ class TaxRoll extends React.Component {
               }
           }
           else if (i == "Expected_Taxroll_Year") {
+              year = " (2018)"
               var h = "<br>" + '<a id="reportedValue">' + p[i] + "%" + '</a>' + " of the TAXROLLYEAR field contains expected (" + d + ") tax roll year values.<br>"
 
               if (p[i] <= 97) {
@@ -492,6 +518,7 @@ class TaxRoll extends React.Component {
               }
           }
           else if (i == "Other_Taxroll_Years") {
+                  year = ""
                   var h = "<br>" + '<a id="reportedValue">' + "0%" + '</a>' + " of the TAXROLLYEAR field contains values other than the previous (" + (d - 1) + "), future (" + (d + 1) + "), or expected (" + d + ") tax roll year.<br><br>"
 
                   if (p[i] > 0) {
@@ -499,6 +526,7 @@ class TaxRoll extends React.Component {
               }
           }
           else if (i == "Future_Taxroll_Years") {
+              year = ""
               var h = "<br>" + '<a id="reportedValue">' + p[i] + "%" + '</a>' +  " of the TAXROLLYEAR field contains future (" + d + ") tax roll year values.<br><br>"
 
               if (p[i] >= 3) {
@@ -525,7 +553,7 @@ class TaxRoll extends React.Component {
                offset = "-300"
                theme = "light"
              >
-               <li className="lihover" id={i} key={i}><b>{z + ": "}</b> {+ p[i] + "%"}</li>
+               <li className="lihover" id={i} key={i}><b>{z + year + ": "}</b> {+ p[i] + "%"}</li>
             </Tooltip>
 
           );
@@ -535,8 +563,10 @@ class TaxRoll extends React.Component {
     render() {
       return (
          <div id="broadlevel">
-          <h3 id = "smallerrors">Tax Roll Percentages</h3>
-          <ul className="data"> {this.list()}</ul>
+            <div id="broadlevelparent">
+                <h3 id = "smallerrors"  class= "tax-roll-missing" >Tax Roll Percentages</h3>
+                <ul className="data"> {this.list()}</ul>
+            </div>
          </div>
       );
     }
@@ -592,8 +622,10 @@ class MissingRecords extends React.Component {
     render() {
       return (
          <div id="broadlevel">
-          <h3 id = "smallerrors">Missing Records</h3>
-          <ul className="data"> {this.list()}</ul>
+            <div id="broadlevelparent">
+                <h3 id = "smallerrors" class= "tax-roll-missing" >Missing Records</h3>
+                <ul className="data"> {this.list()}</ul>
+            </div>
          </div>
       );
     }
@@ -790,3 +822,77 @@ class Expand extends React.Component {
 
 
 ReactDOM.render(<App/>,document.getElementById('root'));
+
+// Animated tutorial (using jQuery because it is fastest to implement right now)
+var broad_A 
+var inline_B 
+var summary_C 
+
+var interval_X = 6000;
+
+var interval_Y_obj 
+var interval_Y = 1000;
+
+var firstRound = true;
+
+function administerTutorial(_directive){
+  if (_directive == "stop"){
+    clearTimeout(broad_A);
+    clearTimeout(inline_B);
+    clearTimeout(summary_C);
+    clearInterval(interval_Y_obj);
+    $("#inline").css("opacity","1")
+    $("#comparison").css("opacity","1")
+    $("#summary").css("opacity","1")
+    $("#broad").css("opacity","1")
+    $("#summary").trigger( "click" ); // to disengage any on-click popups that may be open 
+    $(".fake-highlight").removeClass("fake-highlight")
+    $("#popupHider").append($("#popupTutorial"))
+  }else{
+    $("#inline").css("opacity","0.25")
+    $("#comparison").css("opacity","0.25")
+    $("#summary").css("opacity","0.25")
+    if (firstRound){
+      $("#summary").append("<div id='popupTutorial' class='popup-tutorial'><img style='width: 20px; position:absolute;' src='pointer.png' alt='pointer'></div>");
+      $("#summary").append("<div id='popupHider' class='popup-hider'></div>");
+      firstRound = false;
+    }
+    feed(["Geometric_File_Error","Geometric_Misplacement_Flag","Coded_Domain_Fields"])
+
+
+    broad_A = setTimeout(function(){ 
+      $("#summary").trigger( "click" ); // to disengage any on-click popups that may be open 
+      $("#inline").css("opacity","1")
+      $("#broad").css("opacity","0.25")
+      feed(["General_Errors","Address_Errors","Tax_Errors","Geometric_Errors"])
+    }, interval_X);
+
+    inline_B = setTimeout(function(){ 
+      $("#summary").trigger( "click" ); // to disengage any on-click popups that may be open 
+      $("#comparison").css("opacity","1")
+      $("#inline").css("opacity","0.25")
+    }, interval_X * 2);
+
+    summary_C = setTimeout(function(){ 
+      $("#summary").trigger( "click" ); // to disengage any on-click popups that may be open 
+      $("#helpButton").trigger( "click" ); // to disengage any on-click popups that may be open 
+      administerTutorial("stop")
+    }, interval_X * 3);
+  }
+}
+
+function feed(_ids){
+  var count_Y = 0
+  switch_Y();
+  interval_Y_obj = setInterval(switch_Y, 1000);
+  function switch_Y(){
+    if (count_Y > _ids.length){
+      clearInterval(interval_Y_obj);
+      $("#" + _ids[_ids.length - 1] ).trigger( "click" );
+    }else{
+      $(".fake-highlight").removeClass("fake-highlight")
+      $("#" + _ids[count_Y] ).addClass("fake-highlight").append($("#popupTutorial"))
+      count_Y++;
+    }
+  }
+}
