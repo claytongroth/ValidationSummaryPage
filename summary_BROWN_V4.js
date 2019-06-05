@@ -52,7 +52,7 @@ var testValues = {
     "broadLevelErrors": {
         "Geometric_File_Error": ["None"],
         "Geometric_Misplacement_Flag": ["None"],
-        "Coded_Domain_Fields": ""
+        "Coded_Domain_Fields": "SUFFIX, STREETTYPE, PREFIX, AUXCLASS, IMPROVED, PROPCLASS"
     },
     "inLineErrors": {
         "Tax_Errors": "6599",
@@ -63,7 +63,7 @@ var testValues = {
     "Records_Missing": {
         "Missing_CONAME": "0",
         "Missing_PARCELSRC": "0",
-        "Missing_PARCELFIPS": "0"
+        "Missing_PARCELFIPS": "60"
     },
     "Fields_Diffs": {
         "PLACENAME": "0",
